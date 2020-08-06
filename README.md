@@ -7,7 +7,7 @@ CURPValidator es una sencilla clase en Python para comparar una **CURP** y un **
 ```python
 >>> from CURPValidator import CURPValidator
 >>> CURPValidator.validate('POPC990709MGTSRL02', 'CLAUDIA LEONOR POSADA PEREZ')
-	{'nombre': 'CLAUDIA LEONOR', 'apellido': 'POSADA', 'apellido_m': 'PEREZ'}
+{'nombre': 'CLAUDIA LEONOR', 'apellido': 'POSADA', 'apellido_m': 'PEREZ'}
 	
 # Funciona con prefijos como Del, De la, De los, etc
 >>> CURPValidator.validate('MAGE981117MMNCRS05', 'ESTEFANIA DE LOS DOLORES MACIAS GARCIA')
