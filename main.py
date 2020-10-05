@@ -92,7 +92,7 @@ class CURPValidator:
                     "VXKA", "RXBO", "CXJI", "CXJO",
                     "SXNO", "SXXO", "GXEI", "GXEY",
                     "MXKO", "KXGA", "MXON", "KXGE",
-                    "LXLO", "GXTA", "LXLO", "PXTO"]
+                    "LXLO", "LXLO", "GXTA", "PXTO"]
 
         bad_words = ["ROBE", "RATA", "CAGA", "MAME",
                      "LOCA", "CACA", "VAGA", "MEAR",
