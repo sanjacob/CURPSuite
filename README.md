@@ -28,7 +28,7 @@ CURPValidator es una sencilla clase en Python para comparar una **CURP** y un **
 >>> CURPValidator.validate('MACD990727MMMCRRN0', 'DANIELA IVETTE MARTINEZ CRUZ')
 False
 ```
-	 
 
-Este programa se distribuye bajo la licencia GNU 2.0, más información en el sitio de la [Free Software Foundation](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) 
+
+Este programa se distribuye bajo la licencia GPLv2, más información en el sitio de la [Free Software Foundation](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) 
 
