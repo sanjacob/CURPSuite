@@ -17,6 +17,8 @@
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
 
+from enum import IntEnum
+
 
 class CURPChar(IntEnum):
     """Guarda las posiciones de los datos de la CURP"""
