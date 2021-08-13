@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+
+"""
+Entidades de la República Mexicana y su código ISO
+"""
+
 _estados = {
   "AS": {
     "name": "Aguascalientes",
