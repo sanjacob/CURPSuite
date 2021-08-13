@@ -4,7 +4,7 @@
 Palabras inconvenientes censuradas, y las posibles vocales reales
 """
 
-_altisonantes = {
+altisonantes = {
     "BXCA": ("A"),
     "BXKA": ("A"),
     "BXEI": ("U"),

@@ -4,7 +4,7 @@
 Entidades de la República Mexicana y su código ISO
 """
 
-_estados = {
+estados = {
   "AS": {
     "name": "Aguascalientes",
     "iso": "MX-AGU"
