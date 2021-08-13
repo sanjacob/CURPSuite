@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-CURPValidator
+CURP Suite
+Jacob Sánchez Pérez
+Copyright (C) 2021
 """
-
-# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,12 +31,11 @@ __all__ = [
     "__copyright__",
 ]
 
+__title__ = "CURP Suite"
+__summary__ = "Análisis y validación de la CURP Mexicana"
+__uri__ = "https://github.com/jacobszpz/CURPSuite"
 
-__title__ = "CURPValidator"
-__summary__ = "Validación y extracción de datos de la CURP"
-__uri__ = "https://github.com/jacobszpz/CURPValidator"
-
-__version__ = "1.2.0"
+__version__ = "2.0.0"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
