@@ -9,6 +9,8 @@ unidecode = "*"
 [dev-packages]
 hypothesis = "*"
 coverage = "*"
+sphinx = "*"
+recommonmark = "*"
 
 [requires]
 python_version = "3.9"
