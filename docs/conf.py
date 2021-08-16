@@ -35,7 +35,9 @@ extensions = [
     'recommonmark',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.doctest'
+    'sphinx.ext.doctest',
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.viewcode'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -65,6 +67,9 @@ intersphinx_mapping = {
     # 'pathlib': ('https://docs.python.org/3/library/pathlib.html', None)
 }
 
+# Make sure the target is unique
+autosectionlabel_prefix_document = True
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -81,8 +86,18 @@ html_theme_options = {
     'github_repo': 'CURPValidator',
     'github_banner': True,
     'show_related': False,
-    'note_bg': '#FFF59C'
+    'note_bg': '#FFF59C',
+    'github_button': True,
+    'github_type': 'star',
+    'description': __about__.__summary__,
+    'extra_nav_links': {'CURP Suite @ PyPI': 'https://pypi.com'}
 }
+
+# html_sidebars = {
+#     "**": [
+#         "about.html", "navigation.html", "localtoc.html", "relations.html", "sourcelink.html", "searchbox.html"
+#     ],
+# }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

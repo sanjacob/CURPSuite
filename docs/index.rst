@@ -3,13 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-CURP Suite: CURPs para Humanos
-==============================
+CURP Suite: CURP para Humanos
+================================
 
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-**CURP Suite** es una librería de análisis y validación de la CURP Mexicana para Python.
+**CURP Suite** es una librería de análisis y validación de la
+:abbr:`CURP (Clave Única de Registro de Población)` Mexicana para Python.
 
 ---------------
 
@@ -23,24 +24,40 @@ CURP Suite: CURPs para Humanos
     2
     >>> c.entidad
     'Ciudad de México'
-    >>> c.nombre_valido("CONCEPCIÓN")
+    >>> c.nombre_valido("Concepción")
     True
 
 
-Guia
-----
+**CURP Suite** te permite extraer toda la información que contiene una CURP
+de forma conveniente. Además, toda la validación es automática.
+CURP Suite está diseñado para dar soporte a toda la especificación oficial de la CURP.
+
+
+Características
+---------------
+
+- Extracción de datos
+
+  - Fecha de nacimiento como objeto :class:`datetime.date`
+  - Sexo de acuerdo a `ISO/IEC 5218`_
+  - Nombre y clave `ISO 3166-2`_ de la entidad federativa de nacimiento
+
+- Representación JSON de datos extraídos
+- Validación con nombres y apellidos
+- Validación con nombre completo
+- Interfaz de Línea de Comandos
+
+
+Manual De Uso
+-------------
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   basics
    curp_class
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. _ISO/IEC 5218: https://en.wikipedia.org/wiki/ISO/IEC_5218
+.. _ISO 3166-2: https://www.iso.org/obp/ui/#iso:code:3166:MX
