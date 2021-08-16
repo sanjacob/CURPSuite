@@ -56,7 +56,7 @@ class CURP():
     _ignored_words = ('DA', 'DAS', 'DE', 'DEL', 'DER', 'DI', 'DIE', 'DD',
                       'EL', 'LA', 'LOS', 'LAS', 'LE', 'LES', 'MAC', 'MC',
                       'VAN', 'VON', 'Y')
-    _special_chars = ('/', '-', '.', "'")
+    _special_chars = ('/', '-', '.', "'", '’')
     _ignored_names = ('MARIA', 'MA.', 'MA', 'JOSE', 'J', 'J.')
 
     # Sexes
