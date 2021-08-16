@@ -11,7 +11,7 @@ datetime.date(1956, 6, 26)
 2
 >>> c.entidad
 'Ciudad de México'
->>> c.nombre_valido("CONCEPCIÓN")
+>>> c.nombre_valido("Concepción")
 True
 ```
 
@@ -40,6 +40,7 @@ $ python -m pip install CURPSuite
 - Representación JSON de datos extraídos
 - Validación con nombres y apellidos
 - Validación con nombre completo
+- Interfaz de Línea de Comandos
 
 
 
