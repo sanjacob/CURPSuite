@@ -55,6 +55,7 @@ Manual De Uso
    :maxdepth: 2
    :caption: Contents:
 
+   install
    basics
    curp_class
 
