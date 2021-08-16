@@ -326,11 +326,17 @@ class CURP():
         """
         # Código de verificación
         verify = self.curp[CURPChar.VERIFICATION]
+        b37_sum = self._verification_sum(self.curp)
+        # Hacer las operaciones finales
+        return self._sum_to_verify_digit(b37_sum) == verify
 
+    @staticmethod
+    def _verification_sum(curp: str) -> int:
+        """Suma de verificación de la CURP."""
         # Convertir curp de base 36 a base 10
         # Se asume que la homoclave de la curp no puede contener "Ñ"
         try:
-            b36_list = [int(c, 36) for c in self.curp]
+            b36_list = [int(c, 36) for c in curp]
         except ValueError:
             raise CURPValueError("La CURP contiene caracteres no válidos.")
         # Ajustar elementos después de la Ñ (por diseño)
@@ -340,8 +346,7 @@ class CURP():
         # (empezando en 1), a excepción del último carácter,
         # pues este es el de verificación
         b37_sum = sum([i*x for i, x in enumerate(b37_list[-2::-1], 2)])
-        # Hacer las operaciones finales
-        return self._sum_to_verify_digit(b37_sum) == verify
+        return b37_sum
 
     @staticmethod
     def _sum_to_verify_digit(sm: int) -> str:
