@@ -1,12 +1,24 @@
 .. _curp_class:
 
-CURP Reference
-==============
+Referencia de API
+=================
 
 
 CURP
 ----
 
-.. automodule:: curp.curp.CURP
-    :members:
-    :undoc-members:
+.. autoclass:: curp.CURP
+  :inherited-members:
+
+Excepciones
+-----------
+
+.. autoexception:: curp.CURPValueError
+.. autoexception:: curp.CURPLengthError
+.. autoexception:: curp.CURPVerificationError
+.. autoexception:: curp.CURPNameError
+.. autoexception:: curp.CURPFirstSurnameError
+.. autoexception:: curp.CURPSecondSurnameError
+.. autoexception:: curp.CURPDateError
+.. autoexception:: curp.CURPSexError
+.. autoexception:: curp.CURPRegionError
