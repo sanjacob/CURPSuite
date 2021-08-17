@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 CURP Suite
 Jacob Sánchez Pérez

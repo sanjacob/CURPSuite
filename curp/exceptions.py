@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Clases de excepciones de CURP Suite
 """

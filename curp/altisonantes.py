@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Palabras inconvenientes censuradas, y las posibles vocales reales
 """
