@@ -64,6 +64,7 @@ source_suffix = {
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
+    'hypothesis': ('https://hypothesis.readthedocs.io/en/latest', None)
     # 'pathlib': ('https://docs.python.org/3/library/pathlib.html', None)
 }
 
