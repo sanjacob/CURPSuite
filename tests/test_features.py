@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 
 import unittest
+from hypothesis import given
+
 from curp import CURP
 from curp.features import WordFeatures
+from .utils import FeaturedWord
+from .strategies import WordStrats
 
 
 class TestWordFeatures(unittest.TestCase):
     """Pruebas de la clase WordFeatures."""
 
-    def test_word_features(self):
+    @given(WordStrats.words())
+    def test_word_features_extraction(self, featured_word: FeaturedWord) -> None:
+        wf = WordFeatures(featured_word.word)
+        self.assertEqual(featured_word.char, wf.char)
+        self.assertEqual(featured_word.vowel, wf.vowel)
+        self.assertEqual(featured_word.consonant, wf.consonant)
+
+    def test_word_features_extraction_examples(self) -> None:
         """Probar la extracción correcta de características de palabras."""
         words = [
             # Generales
@@ -47,7 +58,6 @@ class TestWordFeatures(unittest.TestCase):
             ('CABEZA DE VACA', 'C', 'A', 'B'),
             ('PONCE DE LEON', 'P', 'O', 'N'),
             ('MONTES DE OCA', 'M', 'O', 'N'),
-
 
             # Nombre compuesto con preposición
             # (DA, DAS, DE, DEL, DER, DI, DIE, DD,
@@ -135,7 +145,8 @@ class TestWordFeatures(unittest.TestCase):
             ('DEE', 'D', 'E', 'X'),
 
             # Sin apellido
-            ('', 'X', 'X', 'X')]
+            ('', 'X', 'X', 'X')
+        ]
 
         for w in words:
             with self.subTest(w=w[0]):
