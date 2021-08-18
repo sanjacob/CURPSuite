@@ -4,6 +4,7 @@ from datetime import date
 from unidecode import unidecode
 from dataclasses import dataclass
 from curp import CURP
+from curp.altisonantes import altisonantes
 
 
 @dataclass(frozen=True)
@@ -16,6 +17,10 @@ class CURPSkeleton:
     birth_date: date
     sex: int
     region: dict[str, str]
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.name} {self.first_surname} {self.second_surname}"
 
 
 class FeaturedWord:
@@ -72,6 +77,13 @@ def build_curp(name: FeaturedWord = None, first_surname: FeaturedWord = None,
     n, f, s = name, first_surname, second_surname
     hc = '0' if date.year <= 1999 else 'A'
     curp = f"{f.char}{f.vowel}{s.char}{n.char}"
+
+    # Si la CURP forma palabra inconveniente, censurar
+    censored = f"{curp[0]}X{curp[2:]}"
+    if censored in altisonantes:
+        if curp[1] in altisonantes[censored]:
+            curp = censored
+
     curp += f"{date:%y%m%d}{sex}{region}"
     curp += f"{f.consonant}{s.consonant}{n.consonant}{hc}V"
     curp = fix_verification(curp)
