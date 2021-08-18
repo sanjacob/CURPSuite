@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 CURP Suite:
 Un sistema de extracción de datos y validación de la CURP
@@ -419,33 +417,3 @@ class CURP():
     def es_extranjero(self) -> bool:
         """Booleano que indica si CURP pertenece a alguien nacido en el extranjero."""
         return self._birth_place['iso'] == ""
-
-
-def main():
-    import argparse
-    parser = argparse.ArgumentParser(
-        'curp',
-        description='Extraer datos de una CURP y validarla.')
-
-    parser.add_argument('curp', help='la curp a analizar')
-    parser.add_argument('-n', '--nombre', help='nombre de pila para validar la CURP')
-    parser.add_argument('-p', '--primer-apellido', help='primer apellido para validar la CURP')
-    parser.add_argument('-s', '--segundo-apellido', help='segundo apellido para validar la CURP')
-    parser.add_argument('-c', '--nombre-completo', help='nombre completo para validar la CURP')
-
-    args = parser.parse_args()
-
-    if args.curp is not None:
-        c = CURP(
-            args.curp,
-            nombre=args.nombre,
-            primer_apellido=args.primer_apellido,
-            segundo_apellido=args.segundo_apellido,
-            nombre_completo=args.nombre_completo
-        )
-
-    return c.json()
-
-
-if __name__ == '__main__':
-    exit(main())
