@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+
+from datetime import date
+from unidecode import unidecode
+from dataclasses import dataclass
+from curp import CURP
+
+
+@dataclass(frozen=True)
+class CURPSkeleton:
+    """Holds data that belongs to a CURP."""
+    curp: str
+    name: str
+    first_surname: str
+    second_surname: str
+    birth_date: date
+    sex: int
+    region: dict[str, str]
+
+
+class FeaturedWord:
+    """Similar a :class:`WordFeatures` pero las posiciones de las características
+    son especificadas al crear el objeto.
+
+    :param word: Palabra
+    :param char: Posición del primer carácter.
+    :param vowel: Posición de la primera vocal.
+    :param consonant: Posición de la primera consonante.
+
+    Si alguna de las posiciones es -1 la característica asignada será "X"
+    """
+    def __init__(self, word="", char=0, vowel=1, consonant=2):
+        self._word = word
+        w = normalise_word(word)
+        assert len(w) > max(vowel, consonant)
+
+        self._char = w[char] if w else "X"
+        self._vowel = w[vowel] if vowel != -1 else "X"
+        self._consonant = w[consonant] if consonant != -1 else "X"
+
+    @property
+    def word(self) -> str:
+        return self._word
+
+    @property
+    def char(self) -> str:
+        return self._char
+
+    @property
+    def vowel(self) -> str:
+        return self._vowel
+
+    @property
+    def consonant(self) -> str:
+        return self._consonant
+
+
+def fix_verification(curp: str) -> str:
+    """Corregir dígito de verificación de una CURP."""
+    cs = CURP._verification_sum(curp)
+    d = CURP._sum_to_verify_digit(cs)
+    return f"{curp[:-1]}{d}"
+
+def normalise_word(word: str) -> str:
+    """Procesar palabra para eliminar peculiaridades y volverla mayúscula."""
+    return unidecode(word.upper().replace("Ñ", "X"))
+
+def build_curp(name: FeaturedWord = None, first_surname: FeaturedWord = None,
+               second_surname: FeaturedWord = None, date: date = date(2000, 1, 1),
+               sex: str = 'M', region: str = 'DF') -> str:
+    """Ensambla una CURP a partir de parámetros."""
+    n, f, s = name, first_surname, second_surname
+    hc = '0' if date.year <= 1999 else 'A'
+    curp = f"{f.char}{f.vowel}{s.char}{n.char}"
+    curp += f"{date:%y%m%d}{sex}{region}"
+    curp += f"{f.consonant}{s.consonant}{n.consonant}{hc}V"
+    curp = fix_verification(curp)
+    return curp
