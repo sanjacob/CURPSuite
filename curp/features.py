@@ -15,7 +15,6 @@
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
 
-import re
 from unidecode import unidecode
 from functools import partialmethod
 
@@ -40,11 +39,11 @@ class WordFeatures:
     palabras
     """
 
-    _vowels = "[AEIOU]"
-    _consonants = "[BCDFGHJKLMNÑPQRSTVWXYZ]"
+    _vowels = "AEIOU"
+    _consonants = "BCDFGHJKLMNÑPQRSTVWXYZ"
 
-    def __init__(self, word: str, ignored_words: tuple[str] = (),
-                 special_chars: tuple[str] = ()):
+    def __init__(self, word: str, ignored_words: tuple[str, ...] = (),
+                 special_chars: tuple[str, ...] = ()):
         self._char = "X"
 
         # Reemplazar Ñ's
@@ -57,6 +56,7 @@ class WordFeatures:
         pieces = word.split()
 
         if pieces:
+            # Preservar última palabra
             pieces = [w for w in pieces[:-1]
                       if w not in ignored_words] + [pieces[-1]]
 
@@ -70,8 +70,11 @@ class WordFeatures:
     @staticmethod
     def _find_char(charset: str, word: str, pos: int = 0) -> str:
         """Encuentra cualquier carácter de un set regex en una palabra."""
-        i = re.findall(charset, word)
-        return "X" if len(i) <= pos else i[pos]
+        # Más rápido que regex para este caso
+        for char in word[pos:]:
+            if char in charset:
+                return char
+        return "X"
 
     _find_vowel = partialmethod(_find_char, _vowels)
     _find_consonant = partialmethod(_find_char, _consonants)

@@ -3,7 +3,7 @@
 import argparse
 from .curp import CURP, CURPValueError
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(
         'curp',
         description='Extraer datos de una CURP y validarla.')
@@ -26,10 +26,10 @@ def main():
                 nombre_completo=args.nombre_completo
             )
         except CURPValueError as e:
-            return e
+            print(e)
         else:
-            return c.json()
-
+            print(c.json())
+    return 0
 
 if __name__ == '__main__':
     exit(main())
