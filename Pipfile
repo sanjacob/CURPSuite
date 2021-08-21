@@ -11,6 +11,8 @@ hypothesis = "*"
 coverage = "*"
 sphinx = "*"
 recommonmark = "*"
+mypy = "*"
+tox = "*"
 
 [requires]
 python_version = "3.9"
