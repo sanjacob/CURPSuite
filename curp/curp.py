@@ -22,8 +22,9 @@ Un sistema de extracción de datos y validación de la CURP
 
 
 import json
+import string
 from datetime import date
-from typing import Optional
+from typing import Optional, Union, Literal
 from enum import Enum, auto
 from unidecode import unidecode
 
@@ -51,11 +52,13 @@ class CURP():
         <CURP [SABC]>
     """
     _LENGTH = 18
+    _CHARSET = f"{string.digits}{string.ascii_uppercase[:14]}{'Ñ'}{string.ascii_uppercase[14:]}"
+
     _ignored_words = ('DA', 'DAS', 'DE', 'DEL', 'DER', 'DI', 'DIE', 'DD',
                       'EL', 'LA', 'LOS', 'LAS', 'LE', 'LES', 'MAC', 'MC',
                       'VAN', 'VON', 'Y')
     _special_chars = ('/', '-', '.', "'", '’')
-    _ignored_names = ('MARIA', 'MA.', 'MA', 'JOSE', 'J', 'J.')
+    _ignored_names = ('MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.')
 
     # Sexes
     _sexes = {'H': 1, 'M': 2}
@@ -96,7 +99,7 @@ class CURP():
 
         if not self._validate_verify():
             raise CURPVerificationError("El dígito verificador no "
-                                                   "coincide con la CURP")
+                                        "coincide con la CURP")
 
         # Fecha de nacimiento
         self._parse_birth_date()
@@ -131,7 +134,8 @@ class CURP():
             names = self.nombre_completo_valido(nombre_completo)
 
             if names:
-                self._name, self._first_surname, self._second_surname = names
+                capital_names = [n.upper() for n in names]
+                self._name, self._first_surname, self._second_surname = capital_names
 
     def nombre_valido(self, name: str) -> bool:
         """Verifica que una CURP sea válida para cierto nombre de pila.
@@ -247,7 +251,7 @@ class CURP():
         # [1-9] para personas nacidas hasta el 1999
         # [A-Z] para personas nacidas desde el 2000
         homonymy = self.curp[CURPChar.HOMONYMY]
-        before_2k = homonymy.isdigit()
+        before_2k = homonymy in string.digits
 
         # Día y mes de nacimiento
         try:
@@ -285,7 +289,7 @@ class CURP():
         self._birth_date = birth_date
         return birth_date
 
-    def _parse_sex(self) -> int:
+    def _parse_sex(self) -> Literal[1, 2]:
         """Obtiene el sexo de la CURP.
 
         :raises ValueError: El sexo en la CURP es incorrecto.
@@ -293,7 +297,7 @@ class CURP():
         :rtype: int
         """
         curp_sex = self.curp[CURPChar.SEX]
-        sex = self._sexes.get(curp_sex, 0)
+        sex : Literal[1, 2] = self._sexes.get(curp_sex, 0)
 
         if not sex:
             raise CURPSexError("El sexo de la CURP no es válido")
@@ -328,23 +332,20 @@ class CURP():
         # Hacer las operaciones finales
         return self._sum_to_verify_digit(b37_sum) == verify
 
-    @staticmethod
-    def _verification_sum(curp: str) -> int:
+    @classmethod
+    def _verification_sum(cls, curp: str) -> int:
         """Suma de verificación de la CURP."""
-        # Convertir curp de base 36 a base 10
-        # Se asume que la homoclave de la curp no puede contener "Ñ"
+        if 'Ñ' in curp:
+            raise CURPValueError("La CURP no puede contener 'Ñ'")
+
         try:
-            b36_list = [int(c, 36) for c in curp]
+            r = sum([i * cls._CHARSET.index(x) for i, x in enumerate(curp[-2::-1], 2)])
+            # Asegurarse de que el digito de verificacion sea valido
+            cls._CHARSET.index(curp[-1])
         except ValueError:
             raise CURPValueError("La CURP contiene caracteres no válidos.")
-        # Ajustar elementos después de la Ñ (por diseño)
-        b37_list = [x+1 if x > 23 else x for x in b36_list]
-
-        # Sumar la multiplicación de cada elemento con su índice inverso
-        # (empezando en 1), a excepción del último carácter,
-        # pues este es el de verificación
-        b37_sum = sum([i*x for i, x in enumerate(b37_list[-2::-1], 2)])
-        return b37_sum
+        else:
+            return r
 
     @staticmethod
     def _sum_to_verify_digit(sm: int) -> str:
@@ -399,7 +400,7 @@ class CURP():
         return self._birth_date
 
     @property
-    def sexo(self) -> int:
+    def sexo(self) -> Literal[1, 2]:
         """Sexo extraído de la CURP."""
         return self._sex
 
