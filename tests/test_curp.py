@@ -19,10 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-from hypothesis import given, assume
+from hypothesis import given, assume, example
 from hypothesis import strategies as st
-from .strategies import NameGen
+from .utils import CURPSkeleton, FeaturedWord, change_curp
+from .strategies import WordStrats, CURPStrats, ASCIIStrats
 
+import json
 import string
 from datetime import date
 from unidecode import unidecode
@@ -34,240 +36,315 @@ from curp import (CURPValueError, CURPLengthError,
                   CURPDateError, CURPSexError, CURPRegionError)
 
 
-def fix_verification(curp: str) -> str:
-    """Corregir dígito de verificación de una CURP."""
-    cs = CURP._verification_sum(curp)
-    d = CURP._sum_to_verify_digit(cs)
-    return f"{curp[:-1]}{d}"
-
-def normalise_word(word: str) -> str:
-    """Capitalizar una palabra, reemplazar Ñ con X y remover acentos y diéresis."""
-    return unidecode(word.upper().replace("Ñ", "X"))
-
-
 class TestCURP(unittest.TestCase):
-    _template = "AAAA000101MDFBBBHV"
+    """Pruebas de la clase CURP."""
+
+    _common_names = (
+        'MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.',
+        'JOSÉ', 'MARÍA', 'JÖSË', 'MÄRÍÁ'
+    )
+
+    _charset = string.digits + string.ascii_uppercase
+
+    # Pruebas que requieren que la construcción del objeto falle
 
     @given(st.text(max_size=17))
-    def test_curp_too_short(self, curp: str):
+    def test_creation_curp_too_short(self, curp: str) -> None:
         """Probar que una CURP muy corta genere error."""
         with self.assertRaises(CURPLengthError):
             CURP(curp)
 
     @given(st.text(min_size=19))
-    def test_curp_too_long(self, curp: str):
+    def test_creation_curp_too_long(self, curp: str) -> None:
         """Probar que una CURP muy larga genere error."""
         with self.assertRaises(CURPLengthError):
             CURP(curp)
 
-    @given(NameGen.names())
-    def test_name_validation(self, n: str) -> None:
-        """Prueba la comprobación de CURP con un nombre de pila aleatorio.
-        """
-        # Procesar nombre
-        name = normalise_word(n)
+    @given(CURPStrats.curps())
+    def test_creation_verification_digit_check(self, sk: CURPSkeleton) -> None:
+        """Probar que sólo un dígito de verificación sea válido para cada CURP."""
+        d = int(sk.curp[-1])
+        for i in range(10):
+            if i != d:
+                with self.assertRaises(CURPVerificationError):
+                    CURP(f"{sk.curp[:-1]}{i}")
+            else:
+                CURP(sk.curp)
 
-        # Modificar CURP
-        curp = self._template
-        curp = curp.replace("AAAA", f"AAA{name[0]}")
-        curp = curp.replace("BBB", f"BB{name[2]}")
-        curp = fix_verification(curp)
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_creation_name_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un nombre de pila incorrecto."""
+        # Asumir que el nombre falso no tenga la misma letra inicial
+        # y primera consonante interna que el nombre real
+        assume(fake_name.loosely_not_equal(sk.features[0]))
 
-        # Probar clase CURP
-        c = CURP(curp)
-        self.assertTrue(c.nombre_valido(n))
+        with self.assertRaises(CURPNameError):
+            c = CURP(sk.curp, nombre=fake_name.word)
 
-    @given(NameGen.names())
-    def test_compound_name_validation(self, n: str) -> None:
-        """Prueba la comprobación de CURP con un nombre de pila compuesto
-        aleatorio.
-        """
-        # Procesar nombre
-        name = normalise_word(n)
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_creation_first_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un primer apellido incorrecto."""
+        # Asumir que el nombre falso no tenga
+        # las mismas caracteristicas que el nombre real
+        assume(fake_name != sk.features[1])
 
-        # Modificar CURP
-        curp = self._template
-        curp = curp.replace("AAAA", f"AAA{name[0]}")
-        curp = curp.replace("BBB", f"BB{name[2]}")
-        curp = fix_verification(curp)
+        with self.assertRaises(CURPFirstSurnameError):
+            c = CURP(sk.curp, primer_apellido=fake_name.word)
 
-        c = CURP(curp)
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_creation_second_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un primer apellido incorrecto."""
+        # Asumir que el nombre falso no tenga la misma letra inicial
+        # y primera consonante interna que el nombre real
+        assume(fake_name.loosely_not_equal(sk.features[2]))
+
+        with self.assertRaises(CURPSecondSurnameError):
+            c = CURP(sk.curp, segundo_apellido=fake_name.word)
+
+    @given(CURPStrats.curps(), ASCIIStrats.text(min_size=6, max_size=6, lowercase=False))
+    def test_creation_date_error(self, sk: CURPSkeleton, d: str)-> None:
+        """Prueba la creacion de una CURP con una fecha con caracteres no numericos. """
+        assume(any(c not in string.digits for c in d))
+
+        curp = change_curp(sk.curp, date=d)
+
+        with self.assertRaises(CURPValueError) as cm:
+            CURP(curp)
+        
+        self.assertNotIsInstance(cm.exception, CURPDateError)
+        self.assertNotIsInstance(cm.exception, CURPVerificationError)
+
+    @given(CURPStrats.curps(), st.integers(0, 99), st.integers(0, 99), st.integers(0, 99))
+    def test_creation_date_error_nonexistent_dates(self, sk: CURPSkeleton, y: int, m: int, d: int) -> None:
+        """Probar que fechas incorrectas provoquen un error."""
+        date_is_valid = False
+        century = '19' if sk.curp[-2].isdigit() else '20' 
+        
+        try:
+            date(int(f"{century}{y:02}"), m, d)
+        except ValueError:
+            pass
+        else:
+            date_is_valid = True
+
+        assume(not date_is_valid)
+
+        fake_date = f"{y:02}{m:02}{d:02}"
+        curp = change_curp(sk.curp, date=fake_date)
+        
+        with self.assertRaises(CURPDateError):
+            CURP(curp)
+
+    @given(CURPStrats.curps(), ASCIIStrats.characters(lowercase=False))
+    def test_creation_sex_error(self, sk: CURPSkeleton, s: str) -> None:
+        """Probar que códigos incorrectos de sexo provoquen un error."""
+        # Solo probar códigos alfanuméricos incorrectos
+        assume(s != 'H' and s != 'M')
+
+        curp = change_curp(sk.curp, sex=s)
+
+        with self.assertRaises(CURPSexError):
+            CURP(curp)
+
+    @given(CURPStrats.curps(), ASCIIStrats.text(min_size=2, max_size=2, lowercase=False))
+    def test_creation_region_error(self, sk: CURPSkeleton, r: str) -> None:
+        """Probar que códigos incorrectos de región provoquen un error."""
+        # Solo probar códigos alfanuméricos incorrectos
+        assume(r not in estados.estados)
+    
+        curp = change_curp(sk.curp, region=r)
+    
+        with self.assertRaises(CURPRegionError):
+            CURP(curp)
+    
+    @given(st.text(min_size=18, max_size=18))
+    def test_creation_invalid_characters(self, curp: str):
+        """Probar que caracteres que no son validos en la CURP provoquen un error. """
+        assume(any(c not in self._charset for c in curp))
+
+        with self.assertRaises(CURPValueError) as cm:
+            CURP(curp)
+
+        self.assertNotIsInstance(cm.exception, CURPVerificationError)
+        self.assertNotIsInstance(cm.exception, CURPLengthError)
+
+    # Pruebas que requieren que el objeto sea construido exitosamente
+
+    @given(CURPStrats.curps())
+    def test_curp_property(self, sk: CURPSkeleton) -> None:
+        """Prueba que la propiedad CURP sea la correcta."""
+        c = CURP(sk.curp)
+        self.assertEqual(c.curp, sk.curp)
+
+    @given(CURPStrats.curps())
+    def test_default_names_are_null(self, sk: CURPSkeleton) -> None:
+        """Prueba que los nombres por defecto sean None."""
+        c = CURP(sk.curp)
+        self.assertIsNone(c.nombre)
+        self.assertIsNone(c.primer_apellido)
+        self.assertIsNone(c.segundo_apellido)
+
+    @given(CURPStrats.curps())
+    def test_name_property(self, sk: CURPSkeleton) -> None:
+        """Prueba la creación de una CURP con un nombre de pila."""
+        c = CURP(sk.curp, nombre=sk.name)
+        self.assertEqual(c.nombre, sk.name.upper())
+
+    @given(CURPStrats.curps())
+    def test_first_surname_property(self, sk: CURPSkeleton) -> None:
+        """Prueba la creación de una CURP con primer apellido."""
+        c = CURP(sk.curp, primer_apellido=sk.first_surname)
+        self.assertEqual(c.primer_apellido, sk.first_surname.upper())
+
+    @given(CURPStrats.curps())
+    def test_second_surname_property(self, sk: CURPSkeleton) -> None:
+        """Prueba la creación de una CURP con segundo apellido."""
+        c = CURP(sk.curp, segundo_apellido=sk.second_surname)
+        self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
+
+    @given(CURPStrats.curps())
+    def test_name_and_surnames_properties(self, sk: CURPSkeleton) -> None:
+        """Prueba la creación de una CURP con nombres/apellidos en los argumentos."""
+        c = CURP(
+            sk.curp,
+            nombre=sk.name,
+            primer_apellido=sk.first_surname,
+            segundo_apellido=sk.second_surname
+        )
+
+        self.assertEqual(c.nombre, sk.name.upper())
+        self.assertEqual(c.primer_apellido, sk.first_surname.upper())
+        self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
+
+    @given(CURPStrats.curps())
+    def test_birth_date_property(self, sk: CURPSkeleton) -> None:
+        """Prueba que la extracción de la fecha de nacimiento de la CURP funcione."""
+        c = CURP(sk.curp)
+        self.assertEqual(c.fecha_nacimiento, sk.birth_date)
+
+    @given(CURPStrats.curps())
+    def test_sex_property(self, sk: CURPSkeleton) -> None:
+        """Prueba que la extracción del sexo de la CURP funcione."""
+        c = CURP(sk.curp)
+        self.assertEqual(c.sexo, sk.sex)
+
+    @given(CURPStrats.curps())
+    def test_region_properties(self, sk: CURPSkeleton) -> None:
+        """Prueba que la extracción de la entidad federativa de la CURP funcione."""
+        c = CURP(sk.curp)
+        self.assertEqual(c.entidad, sk.region['name'])
+        self.assertEqual(c.entidad_iso, sk.region['iso'])
+        self.assertEqual(c.es_extranjero, not bool(sk.region['iso']))
+
+    @given(CURPStrats.curps())
+    def test_name_validation(self, sk: CURPSkeleton):
+        """Prueba la validación del nombre de pila."""
+        c = CURP(sk.curp)
+        self.assertTrue(c.nombre_valido(sk.name))
+
+    @given(CURPStrats.curps())
+    def test_name_validation_with_compound_name(self, sk: str) -> None:
+        """Prueba la comprobación de CURP con un nombre compuesto común."""
+        c = CURP(sk.curp)
 
         # Probar con todos los nombres ignorados
-        for i in CURP._ignored_names + ('JOSÉ', 'MARÍA', 'JÖSË', 'MÄRÍÁ'):
-            self.assertTrue(c.nombre_valido(f"{i} {n}"))
-            self.assertTrue(c.nombre_valido(f"{i.title()} {n}"))
-            self.assertTrue(c.nombre_valido(f"{i.lower()} {n}"))
+        for n in self._common_names:
+            self.assertTrue(c.nombre_valido(f"{n} {sk.name}"))
+            self.assertTrue(c.nombre_valido(f"{n.title()} {sk.name}"))
+            self.assertTrue(c.nombre_valido(f"{n.lower()} {sk.name}"))
 
-    def test_ignored_name_validation(self) -> None:
-        """Probar la comprobación de la CURP con nombres comunes cuando el
-        nombre no es compuesto."""
-        for i in CURP._ignored_names:
-            with self.subTest(i=i):
-                wf = WordFeatures(i, CURP._ignored_words, CURP._special_chars)
+    @given(CURPStrats.curps())
+    def test_first_surname_validation(self, sk: CURPSkeleton):
+        """Prueba la validación del primer apellido."""
+        c = CURP(sk.curp)
+        self.assertTrue(c.primer_apellido_valido(sk.first_surname))
 
-                curp = self._template
-                curp = curp.replace("AAAA", f"AAA{wf.char}")
-                curp = curp.replace("BBB", f"BB{wf.consonant}")
-                curp = fix_verification(curp)
+    @given(CURPStrats.curps())
+    def test_second_surname_validation(self, sk: CURPSkeleton):
+        """Prueba la validación del segundo apellido."""
+        c = CURP(sk.curp)
+        self.assertTrue(c.segundo_apellido_valido(sk.second_surname))
 
-                c = CURP(curp)
-                self.assertTrue(c.nombre_valido(i))
+    @given(CURPStrats.curps())
+    def test_full_name_validation(self, sk: CURPSkeleton):
+        """Prueba la validación del nombre completo."""
+        c = CURP(sk.curp)
+        self.assertTrue(c.nombre_completo_valido(sk.full_name))
 
-    @given(NameGen.names())
-    def test_first_surname_validation(self, n: str) -> None:
-        """Prueba la comprobación de CURP con un primer apellido aleatorio.
-        """
-        name = normalise_word(n)
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_name_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un nombre de pila incorrecto."""
+        # Asumir que el nombre falso no tenga la misma letra inicial
+        # y primera consonante interna que el nombre real
+        assume(fake_name.loosely_not_equal(sk.features[0]))
+        c = CURP(sk.curp)
+        self.assertFalse(c.nombre_valido(fake_name.word))
 
-        curp = self._template
-        curp = curp.replace("AAAA", f"{name[0]}{name[1]}AA")
-        curp = curp.replace("BBB", f"{name[2]}BB")
-        curp = fix_verification(curp)
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_first_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un primer apellido incorrecto."""
+        # Asumir que el nombre falso no tenga la misma letra inicial
+        # y primera consonante interna que el nombre real
+        assume(fake_name != sk.features[1])
+        c = CURP(sk.curp)
+        self.assertFalse(c.primer_apellido_valido(fake_name.word))
 
-        c = CURP(curp)
-        self.assertTrue(c.primer_apellido_valido(n))
+    @given(CURPStrats.curps(), WordStrats.words())
+    def test_second_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+        """Prueba la creación de una CURP con un primer apellido incorrecto."""
+        # Asumir que el nombre falso no tenga la misma letra inicial
+        # y primera consonante interna que el nombre real
+        assume(fake_name.loosely_not_equal(sk.features[2]))
+        c = CURP(sk.curp)
+        self.assertFalse(c.segundo_apellido_valido(fake_name.word))
 
-    def test_first_surname_inconvenient(self):
-        """Probar la comprobación del apellido cuando la CURP contiene una
-        palabra inconveniente."""
-        rude = altisonantes.altisonantes
+    @given(CURPStrats.curps())
+    def test_json_dump(self, sk: CURPSkeleton):
+        """Prueba el método json."""
+        c = CURP(sk.curp)
 
-        for r, vowels in rude.items():
-            curp = self._template.replace("AAAA", r)
-            curp = fix_verification(curp)
-            c = CURP(curp)
+        j = json.loads(c.json())
+        self.assertEqual(c.curp, j['curp'])
+        self.assertEqual(str(c.fecha_nacimiento), j['fecha_nacimiento'])
+        self.assertEqual(c.sexo, j['sexo'])
+        self.assertEqual(c.entidad, j['entidad_nacimiento']['name'])
+        self.assertEqual(c.entidad_iso, j['entidad_nacimiento']['iso'])
 
-            for v in vowels:
-                with self.subTest(r=r, v=v):
-                    a = f"{r[0]}{v}B"
-                    self.assertTrue(c.primer_apellido_valido(a))
+        n = any([x in j for x in ('nombre', 'primer_apellido', 'segundo_apellido')])
+        self.assertFalse(n)
 
-    @given(NameGen.names())
-    def test_second_surname_validation(self, n: str) -> None:
-        """Prueba la comprobación de CURP con un segundo apellido aleatorio.
-        """
-        name = normalise_word(n)
+    @given(CURPStrats.curps())
+    def test_json_dump_name_and_surnames(self, sk: CURPSkeleton):
+        """Prueba el método json."""
+        c = CURP(
+            sk.curp,
+            nombre=sk.name,
+            primer_apellido=sk.first_surname,
+            segundo_apellido=sk.second_surname
+        )
 
-        curp = self._template
-        curp = curp.replace("AAAA", f"AA{name[0]}A")
-        curp = curp.replace("BBB", f"B{name[2]}B")
-        curp = fix_verification(curp)
+        j = json.loads(c.json())
+        self.assertEqual(c.nombre, j['nombre'])
+        self.assertEqual(c.primer_apellido, j['primer_apellido'])
+        self.assertEqual(c.segundo_apellido, j['segundo_apellido'])
 
-        c = CURP(curp)
-        self.assertTrue(c.segundo_apellido_valido(n))
+    # Pruebas de clase
 
-    @given(st.dates(min_value=date(1900, 1, 1), max_value=date(2099, 1, 1)),
-           st.integers(0, 25))
-    def test_date_parse(self, d: date, v: int) -> None:
-        """Probar la extracción correcta de fechas de la CURP."""
-        curp = self._template
+    @given(st.integers(0))
+    def test_static_sum_to_digit(self, s: int):
+        """Probar método para convertir suma en dígito verificador."""
+        d = CURP._sum_to_verify_digit(s)
+        self.assertEqual(len(d), 1)
+        self.assertTrue(d.isdigit())
 
-        if d.year <= 1999:
-            # Insertar dígito como homoclave
-            curp = curp.replace("H", str(v % 10))
-        else:
-            # Insertar letra como homoclave
-            curp = curp.replace("H", chr(ord('A')+v))
+        # Alternativa a mod
+        m = int(str(s)[-1])
+        m = 10 - m if m else m
+        self.assertEqual(str(m), d)
 
-        curp = curp.replace("000101", d.strftime("%y%m%d"))
-        curp = fix_verification(curp)
-
-        c = CURP(curp)
-        self.assertEqual(c.fecha_nacimiento, d)
-
-    @given(st.integers(0, 99), st.integers(13, 99), st.integers(1, 30))
-    def test_date_parse_wrong_month(self, y: int, m: int, d: int):
-        """Probar que fechas incorrectas provoquen una excepción."""
-        curp = self._template.replace("000101", f"{y:02}{m}{d:02}")
-        curp = fix_verification(curp)
-
-        with self.assertRaises(CURPDateError):
-            CURP(curp)
-
-    @given(st.integers(0, 99), st.integers(1, 12), st.integers(32, 99))
-    def test_date_parse_wrong_day(self, y, m, d):
-        """Probar que fechas incorrectas provoquen una excepción."""
-        curp = self._template.replace("000101", f"{y:02}{m:02}{d}")
-        curp = fix_verification(curp)
-
-        with self.assertRaises(CURPDateError):
-            CURP(curp)
-
-    def test_sex_parse(self) -> None:
-        """Probar la extracción correcta del sexo de la CURP."""
-        # Parametros correctos y su valor esperado de retorno
-        curp_items = ((self._template.replace('M', 'H'), 1),
-                      (self._template.replace('M', 'M'), 2))
-
-        for i in curp_items:
-            with self.subTest(i=i):
-                curp = fix_verification(i[0])
-                c = CURP(curp)
-                self.assertEqual(c.sexo, i[1])
-
-    @given(st.characters(blacklist_characters=('H', 'M')))
-    def test_sex_parse_error(self, c: str) -> None:
-        """Probar que caracteres incorrectos en sexo provoquen un error."""
-        curp = self._template.replace('M', c)
-        error = CURPSexError
-
-        # Si el carácter es alfanumérico, cambiar dígito y
-        # verificar que CURPSexError sea alzada.
-        # De lo contrario, verificar que CURPValueError sea
-        # alzada (No CURPVerificationError).
-
-        try:
-            int(c, 36)
-        except ValueError:
-            error = CURPValueError
-        else:
-            curp = fix_verification(curp)
-
-        with self.assertRaises(error) as cm:
-            CURP(curp)
-
-        e = cm.exception
-        self.assertNotEqual(type(e), CURPVerificationError)
-
-    def test_region_parse(self) -> None:
-        """Probar la extracción correcta de la entidad federativa de la CURP."""
-        # Parametros correctos y su valor esperado de retorno
-        regiones = estados.estados
-
-        for k, v in regiones.items():
-            curp = self._template.replace("DF", k)
-            c = CURP(fix_verification(curp))
-            self.assertEqual(c.entidad, v['name'])
-            self.assertEqual(c.entidad_iso, v['iso'])
-
-    @given(st.text(min_size=2, max_size=2))
-    def test_region_parse_error(self, r: str) -> None:
-        """Probar que códigos incorrectos de región provoquen un error."""
-        assume(r not in estados.estados)
-        curp = self._template.replace('DF', r)
-        error = CURPRegionError
-
-        # Si el carácter es alfanumérico, cambiar dígito y
-        # verificar que CURPRegionError sea alzada.
-        # De lo contrario, verificar que CURPValueError sea
-        # alzada (No CURPVerificationError).
-
-        try:
-            [int(x, 36) for x in r]
-        except ValueError:
-            error = CURPValueError
-        else:
-            curp = fix_verification(curp)
-
-        with self.assertRaises(error) as cm:
-            CURP(curp)
-
-        e = cm.exception
-        self.assertNotEqual(type(e), CURPVerificationError)
-
-    def test_verification_sum(self):
-        """Probar la comprobación correcta del dígito de verificación."""
+    def test_static_verification_sum(self):
+        """Probar la comprobación correcta del dígito de verificación
+        cuando la CURP contiene sólo un carácter distinto a cero."""
         charset = string.digits + string.ascii_uppercase
 
         # Probar cada carácter válido de la CURP en cada posición.
@@ -281,29 +358,47 @@ class TestCURP(unittest.TestCase):
                     # La suma sólo tendrá un elemento.
                     sm = b36 * n
 
-                    # Convertir a dígito
-                    d = sm % 10
-                    d = 10 - d if d else d
-
                     # Crear CURP
-                    curp = ("0" * (18 - n)) + c + ("0" * (n - 2)) + str(d)
+                    curp = ("0" * (18 - n)) + c + ("0" * (n - 1))
                     cs = CURP._verification_sum(curp)
-                    vd = CURP._sum_to_verify_digit(cs)
-
                     self.assertEqual(sm, cs)
-                    self.assertEqual(str(d), vd)
 
-    @given(st.integers(0))
-    def test_sum_to_digit(self, s: int):
-        """Probar método para convertir suma en dígito verificador."""
-        d = CURP._sum_to_verify_digit(s)
-        self.assertEqual(len(d), 1)
-        self.assertTrue(d.isdigit())
+    # Otras pruebas
 
-        # Alternativa a mod
-        m = int(str(s)[-1])
-        m = 10 - m if m else m
-        self.assertEqual(str(m), d)
+    # @given(CURPStrats.curps())
+    # def test_example(self, g):
+    #     print(g)
+
+    # def test_name_validation_with_common_name(self) -> None:
+    #     """Probar la comprobación de la CURP con nombres comunes que normalmente
+    #     son ignorados cuando el nombre es compuesto."""
+    #
+    #     for i in CURP._ignored_names:
+    #         with self.subTest(i=i):
+    #             wf = WordFeatures(i, CURP._ignored_words, CURP._special_chars)
+    #
+    #             curp = self._template
+    #             curp = curp.replace("AAAA", f"AAA{wf.char}")
+    #             curp = curp.replace("BBB", f"BB{wf.consonant}")
+    #             curp = fix_verification(curp)
+    #
+    #             c = CURP(curp)
+    #             self.assertTrue(c.nombre_valido(i))
+
+    # @given(CURPStrats.curps())
+    # def test_creation_with_full_name(self, sk: CURPSkeleton) -> None:
+    #     """Prueba la creación con nombre completo como argumento."""
+    #     c = CURP(sk.curp, nombre_completo=sk.full_name)
+    #     self.assertEqual(c.fecha_nacimiento, sk.birth_date)
+    #     self.assertEqual(c.sexo, sk.sex)
+    #     self.assertEqual(c.entidad, sk.region['name'])
+    #     self.assertEqual(c.entidad_iso, sk.region['iso'])
+    #     self.assertEqual(c.es_extranjero, not bool(sk.region['iso']))
+    #
+    #     self.assertEqual(c.nombre, sk.name.upper())
+    #     self.assertEqual(c.primer_apellido, sk.first_surname.upper())
+    #     self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
+    #
 
 
 if __name__ == '__main__':

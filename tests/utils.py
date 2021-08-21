@@ -4,23 +4,8 @@ from datetime import date
 from unidecode import unidecode
 from dataclasses import dataclass
 from curp import CURP
+from curp.chars import CURPChar
 from curp.altisonantes import altisonantes
-
-
-@dataclass(frozen=True)
-class CURPSkeleton:
-    """Holds data that belongs to a CURP."""
-    curp: str
-    name: str
-    first_surname: str
-    second_surname: str
-    birth_date: date
-    sex: int
-    region: dict[str, str]
-
-    @property
-    def full_name(self) -> str:
-        return f"{self.name} {self.first_surname} {self.second_surname}"
 
 
 class FeaturedWord:
@@ -59,6 +44,35 @@ class FeaturedWord:
     def consonant(self) -> str:
         return self._consonant
 
+    def loosely_not_equal(self, other: 'FeaturedWord') -> bool:
+        """Compara aproximadamente si no tiene las mismas características que otra palabra."""
+        diff = (self.char != other.char or
+                self.consonant != other.consonant)
+        return diff
+
+    def __ne__(self, other):
+        diff = (self.char != other.char or
+                self.vowel != other.vowel or
+                self.consonant != other.consonant)
+        return diff
+
+
+@dataclass(frozen=True)
+class CURPSkeleton:
+    """Holds data that belongs to a CURP."""
+    curp: str
+    name: str
+    first_surname: str
+    second_surname: str
+    features: list[FeaturedWord]
+    birth_date: date
+    sex: int
+    region: dict[str, str]
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.name} {self.first_surname} {self.second_surname}"
+
 
 def fix_verification(curp: str) -> str:
     """Corregir dígito de verificación de una CURP."""
@@ -72,7 +86,7 @@ def normalise_word(word: str) -> str:
 
 def build_curp(name: FeaturedWord = None, first_surname: FeaturedWord = None,
                second_surname: FeaturedWord = None, date: date = date(2000, 1, 1),
-               sex: str = 'M', region: str = 'DF') -> str:
+               sex: str = 'M', region: str = 'DF', fix_digit: bool = True) -> str:
     """Ensambla una CURP a partir de parámetros."""
     n, f, s = name, first_surname, second_surname
     hc = '0' if date.year <= 1999 else 'A'
@@ -86,5 +100,29 @@ def build_curp(name: FeaturedWord = None, first_surname: FeaturedWord = None,
 
     curp += f"{date:%y%m%d}{sex}{region}"
     curp += f"{f.consonant}{s.consonant}{n.consonant}{hc}V"
-    curp = fix_verification(curp)
+
+    if fix_digit:
+        curp = fix_verification(curp)
+
+    return curp
+
+def insert_in_word(word: str, c: str, i: int):
+    """Reemplaza cierta sección de una string con otra string."""
+    return f"{word[:i]}{c}{word[i + len(c):]}"
+
+def change_curp(curp: str, date: str = None, sex: str = None, region: str = None):
+    """Permite el reemplazo de un elemento de una CURP."""
+    if date is not None:
+        curp = insert_in_word(curp, date, CURPChar.YEAR_0)
+
+    if sex is not None:
+        curp = insert_in_word(curp, sex, CURPChar.SEX)
+
+    if region is not None:
+        curp = insert_in_word(curp, region, CURPChar.REGION_0)
+
+    # Si es posible, arreglar dígito de verificación
+    if curp.isalnum():
+        curp = fix_verification(curp)
+
     return curp

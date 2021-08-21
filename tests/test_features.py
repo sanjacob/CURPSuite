@@ -14,6 +14,7 @@ class TestWordFeatures(unittest.TestCase):
 
     @given(WordStrats.words())
     def test_word_features_extraction(self, featured_word: FeaturedWord) -> None:
+        """Usar generador de palabras para probar la clase :class:`WordFeatures`."""
         wf = WordFeatures(featured_word.word)
         self.assertEqual(featured_word.char, wf.char)
         self.assertEqual(featured_word.vowel, wf.vowel)

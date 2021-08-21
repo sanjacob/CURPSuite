@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import string
 from datetime import date
 from unidecode import unidecode
 from curp import estados
@@ -7,6 +8,33 @@ from .utils import normalise_word, build_curp, FeaturedWord, CURPSkeleton
 from hypothesis import given
 from hypothesis.strategies import (sampled_from, composite, tuples,
                                    integers, dates, lists, booleans)
+
+
+class ASCIIStrats:
+    """Contiene estrategias de :class:`hypothesis` para generar texto ascii."""
+
+    @classmethod
+    @composite
+    def text(draw, cls, min_size: int = 0, max_size: int = None,
+             lowercase: bool = True, uppercase: bool = True, digits: bool = True) -> str:
+        """Genera texto ascii."""
+        word_len = draw(integers(min_size, max_size))
+        charset = ""
+
+        if digits:
+            charset += string.digits
+        if lowercase:
+            charset += string.ascii_lowercase
+        if uppercase:
+            charset += string.ascii_uppercase
+
+        t = ''.join([draw(sampled_from(charset)) for _ in range(word_len)])
+        return t
+
+    @classmethod
+    @composite
+    def characters(draw, cls, lowercase: bool = True, uppercase: bool = True, digits: bool = True):
+        return draw(cls.text(min_size=1, max_size=1, lowercase=lowercase, uppercase=uppercase, digits=digits))
 
 
 class WordStrats:
@@ -55,25 +83,19 @@ class WordStrats:
 
     @classmethod
     @composite
-    def names(draw, cls):
-        """Palabras de 3 carácteres, una letra, una vocal y una consonante en ese orden."""
-        return draw(tuples(cls.letters(), cls.vowels(), cls.consonants()).map(''.join))
-
-    @classmethod
-    @composite
-    def letters(draw, cls):
+    def letters(draw, cls) -> str:
         """Letras del alfabeto español."""
         return draw(sampled_from(cls._alphabet))
 
     @classmethod
     @composite
-    def vowels(draw, cls):
+    def vowels(draw, cls) -> str:
         """Vocales del alfabeto español. Incluye versiones con acentos y diéresis."""
         return draw(sampled_from(cls._vowels))
 
     @classmethod
     @composite
-    def consonants(draw, cls):
+    def consonants(draw, cls) -> str:
         """Consonantes del alfabeto español."""
         return draw(sampled_from(cls._consonants))
 
@@ -94,17 +116,16 @@ class CURPStrats:
         names = []
 
         # Generar nombre y dos apellidos
-        for _ in range(3):
+        w = draw(WordStrats.words(min_size=1))
+        names.append(w)
+
+        for _ in range(2):
             w = draw(WordStrats.words())
             names.append(w)
 
         sex = draw(cls.sexes())
         date = draw(cls.birth_dates())
         region = draw(cls.mexican_states())
-
-        data_dict = {'name': names[0].word, 'first_surname': names[1].word,
-                     'second_surname': names[2].word, 'date': date,
-                     'sex': sex[1], 'region': region[1]}
 
         curp = build_curp(
             name=names[0],
@@ -120,6 +141,7 @@ class CURPStrats:
             name=names[0].word,
             first_surname=names[1].word,
             second_surname=names[2].word,
+            features=names,
             birth_date=date,
             sex=sex[1],
             region=region[1]
