@@ -48,4 +48,4 @@ from .curp import CURP
 from .exceptions import (CURPValueError, CURPLengthError,
                          CURPVerificationError, CURPNameError,
                          CURPFirstSurnameError, CURPSecondSurnameError,
-                         CURPDateError, CURPSexError, CURPRegionError)
+                         CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)

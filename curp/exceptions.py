@@ -21,6 +21,9 @@ class CURPFirstSurnameError(CURPValueError):
 class CURPSecondSurnameError(CURPValueError):
     """El segundo apellido provisto no corresponde a la CURP."""
 
+class CURPFullNameError(CURPValueError):
+    """El nombre completo provisto no corresponde a la CURP."""
+
 class CURPDateError(CURPValueError):
     """La fecha indicada en la CURP es incorrecta."""
 

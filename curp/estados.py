@@ -133,6 +133,6 @@ estados = {
   },
   "NE": {
     "name": "Extranjero",
-    "iso": ""
+    "iso": None 
   }
 }

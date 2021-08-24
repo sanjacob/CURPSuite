@@ -161,11 +161,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:4d27095ed2f17bc58d771d13f4c44894d23b1d089cde7109d168a05461408860",
-                "sha256:6da841424b98179eb00489239162c4c98248cb366221e300de1e58a995e76cd2"
+                "sha256:10699f595eebb9410fd902908aa13aece19be5c437b405092be34f60f69f7999",
+                "sha256:23e853170e15d91b9cdc5c9695c5a512a9eef2d11073b46cd9cccebde939bc35"
             ],
             "index": "pypi",
-            "version": "==6.14.9"
+            "version": "==6.15.0"
         },
         "idna": {
             "hashes": [
@@ -446,11 +446,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:ae442d4d51d5a3afb3711e4c7d94f5ca8461afd27c53f5dd994aba34896cf02d",
-                "sha256:d45d39203b10fdb2f6887c6779865e31de82cea07419a739844cc4bd4b3493e2"
+                "sha256:9fbf8e2ab758b2a5e7cb2c72945e4728089934853076f67ef18d7575c8ab6b88",
+                "sha256:c6c4e77705ada004283610fd6d9ba4f77bc85d235447f875df9f0ba1bc23b634"
             ],
             "index": "pypi",
-            "version": "==3.24.2"
+            "version": "==3.24.3"
         },
         "typing-extensions": {
             "hashes": [
