@@ -8,7 +8,7 @@ CURP Suite es una librería para el análisis y validación de la CURP,
 o Clave Única de Registro de Población.
 
 Uso básico:
-    >>> from curp import CURP
+    >>> from curpsuite import CURP
     >>> c = CURP("SABC560626MDFLRN01")
     >>> c.fecha_nacimiento
     datetime.date(1956, 6, 26)

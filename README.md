@@ -3,7 +3,7 @@
 **CURP Suite** es una librería de análisis y validación de la CURP Mexicana.
 
 ```python
->>> from curp import CURP
+>>> from curpsuite import CURP
 >>> c = CURP("SABC560626MDFLRN01")
 >>> c.fecha_nacimiento
 datetime.date(1956, 6, 26)

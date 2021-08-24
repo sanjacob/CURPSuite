@@ -3,7 +3,7 @@
 import string
 from datetime import date
 from unidecode import unidecode
-from curp import estados
+from curpsuite import estados
 from .utils import normalise_word, build_curp, FeaturedWord, CURPSkeleton
 from hypothesis import given
 from hypothesis.strategies import (sampled_from, composite, tuples,

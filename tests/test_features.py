@@ -3,8 +3,8 @@
 import unittest
 from hypothesis import given
 
-from curp import CURP
-from curp.features import WordFeatures
+from curpsuite import CURP
+from curpsuite.features import WordFeatures
 from .utils import FeaturedWord
 from .strategies import WordStrats
 

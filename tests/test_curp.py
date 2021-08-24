@@ -28,12 +28,12 @@ import json
 import string
 from datetime import date
 from unidecode import unidecode
-from curp.curp import CURP, WordFeatures
-from curp import estados, altisonantes
-from curp import (CURPValueError, CURPLengthError,
+from curpsuite.curp import WordFeatures
+from curpsuite import CURP, estados, altisonantes
+from curpsuite import (CURPValueError, CURPLengthError,
                   CURPVerificationError, CURPNameError,
                   CURPFirstSurnameError, CURPSecondSurnameError,
-                  CURPDateError, CURPSexError, CURPRegionError)
+                  CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)
 
 
 class TestCURP(unittest.TestCase):

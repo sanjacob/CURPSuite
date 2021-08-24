@@ -1,6 +1,6 @@
 """
-CURP Suite:
-Un sistema de extracción de datos y validación de la CURP
+CURP Suite
+Análisis y validación de la CURP mexicana.
 """
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
@@ -24,9 +24,9 @@ Un sistema de extracción de datos y validación de la CURP
 import json
 import string
 from datetime import date
-from typing import Optional, Union, Literal
 from enum import Enum, auto
 from unidecode import unidecode
+from typing import Optional, Union, Literal
 
 from .chars import CURPChar
 from .features import WordFeatures
@@ -34,7 +34,7 @@ from . import altisonantes, estados
 from .exceptions import (CURPValueError, CURPLengthError,
                          CURPVerificationError, CURPNameError,
                          CURPFirstSurnameError, CURPSecondSurnameError,
-                         CURPDateError, CURPSexError, CURPRegionError)
+                         CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)
 
 __all__ = ["CURP"]
 
@@ -46,13 +46,14 @@ class CURP():
 
     Uso::
 
-        >>> from curp import CURP
+        >>> from curpsuite import CURP
         >>> c = CURP("SABC560626MDFLRN01")
         >>> c
         <CURP [SABC]>
     """
     _LENGTH = 18
-    _CHARSET = f"{string.digits}{string.ascii_uppercase[:14]}{'Ñ'}{string.ascii_uppercase[14:]}"
+    # str.index solo regresa la primera coincidencia
+    _CHARSET = f"{string.digits}{string.ascii_uppercase[:14]}N{string.ascii_uppercase[14:]}"
 
     _ignored_words = ('DA', 'DAS', 'DE', 'DEL', 'DER', 'DI', 'DIE', 'DD',
                       'EL', 'LA', 'LOS', 'LAS', 'LE', 'LES', 'MAC', 'MC',
@@ -60,7 +61,7 @@ class CURP():
     _special_chars = ('/', '-', '.', "'", '’')
     _ignored_names = ('MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.')
 
-    # Sexes
+    # Sexos
     _sexes = {'H': 1, 'M': 2}
 
     # Abreviaciones de los estados en la CURP
@@ -110,24 +111,28 @@ class CURP():
 
         # Nombre
         self._name = self._first_surname = self._second_surname = None
+        
+        # Validar caracteres restantes
+        if not self._validate_name_chars():
+            raise CURPValueError('Los caracteres del nombre/apellidos contienen errores')
 
         if nombre is not None:
             if self.nombre_valido(nombre):
                 self._name = nombre.upper()
             else:
-                raise CURPNameError("El nombre de pila no coincide con la CURP")
+                raise CURPNameError('El nombre de pila no coincide con la CURP')
 
         if primer_apellido is not None:
             if self.primer_apellido_valido(primer_apellido):
                 self._first_surname = primer_apellido.upper()
             else:
-                raise CURPFirstSurnameError("El primer apellido no coincide con la CURP")
+                raise CURPFirstSurnameError('El primer apellido no coincide con la CURP')
 
         if segundo_apellido is not None:
             if self.segundo_apellido_valido(segundo_apellido):
                 self._second_surname = segundo_apellido.upper()
             else:
-                raise CURPSecondSurnameError("El segundo apellido no coincide con la CURP")
+                raise CURPSecondSurnameError('El segundo apellido no coincide con la CURP')
 
         if (nombre is primer_apellido is segundo_apellido is None
             and nombre_completo is not None):
@@ -136,6 +141,8 @@ class CURP():
             if names:
                 capital_names = [n.upper() for n in names]
                 self._name, self._first_surname, self._second_surname = capital_names
+            else:
+                raise CURPFullNameError('El nombre completo no parece coincidir con la CURP')
 
     def nombre_valido(self, name: str) -> bool:
         """Verifica que una CURP sea válida para cierto nombre de pila.
@@ -162,7 +169,7 @@ class CURP():
     def primer_apellido_valido(self, primer_apellido: str) -> bool:
         """Verifica que una CURP sea válida para cierto primer apellido.
 
-        :param str primer_apellido: Primer apellido (comúnmente paterno) para validar.
+        :param str primer_apellido: Primer apellido (usualmente paterno) para validar.
         """
         curp_start = self.curp[:CURPChar.NAME_CHAR + 1]
 
@@ -186,7 +193,7 @@ class CURP():
     def segundo_apellido_valido(self, segundo_apellido: str) -> bool:
         """Verifica que una CURP sea válida para cierto segundo apellido.
 
-        :param str segundo_apellido: Segundo apellido (comúnmente materno) para validar.
+        :param str segundo_apellido: Segundo apellido (usualmente materno) para validar.
         """
         wf = WordFeatures(segundo_apellido,
                           self._ignored_words,
@@ -196,49 +203,80 @@ class CURP():
                  and (self.curp[CURPChar.SURNAME_B_CONSONANT] == wf.consonant))
         return valid
 
-    def nombre_completo_valido(self, nombre_completo: str) -> Optional[tuple[str]]:
+    def nombre_completo_valido(self, nombre_completo: str) -> Union[tuple[str, ...], Literal[False]]:
         """Utiliza un nombre completo para validar la CURP.
 
         :param str nombre_completo: Nombre completo para validar.
-        :return: Una tupla con el nombre por partes.
+        :return: Una tupla con el nombre por partes, o False si el nombre no corresponde.
         :rtype: tuple or False
         """
-        name_parts = ([], [], [])
-        state = self._NameParseState.NONE
+        NameParseState = self._NameParseState
 
-        # "VEGR/010517/H/MC/NTS/A5": "RUSSELL NATAHEL VENEGAS GUTIERREZ"
-        current_part = 0
+        names: dict[NameParseState, list[str]] = {k: [] for k in list(NameParseState)}
+        state_gen = (s for s in NameParseState)
+        state = next(state_gen)
+        validation = {NameParseState.NONE: self.nombre_valido,
+                      NameParseState.GIVEN_NAMES: self.primer_apellido_valido,
+                      NameParseState.FIRST_SURNAME: self.segundo_apellido_valido,
+                      NameParseState.SECOND_SURNAME: lambda n: False}
+
+        # Guarda preposiciones y otras palabras ignoradas
+        # hasta encontrar siguiente palabra normal
+        ignored_buffer : list[str] = []
 
         for word in nombre_completo.split():
-            if word not in self._ignored_words:
-                if state is self._NameParseState.NONE:
-                    if self.nombre_valido(word):
-                        state = self._NameParseState.GIVEN_NAMES
-                elif state is self._NameParseState.GIVEN_NAMES:
-                    if self.primer_apellido_valido(word):
-                        state = self._NameParseState.FIRST_SURNAME
-                        current_part += 1
-                elif state is self._NameParseState.FIRST_SURNAME:
-                    if self.segundo_apellido_valido(word):
-                        state = self._NameParseState.SECOND_SURNAME
-                        current_part += 1
+            if word.upper() not in self._ignored_words:
+                if validation[state](word):
+                    state = next(state_gen)
+                elif state is NameParseState.NONE: 
+                    if unidecode(word.upper()) not in self._ignored_names:
+                        return False
+                
+                # Agregar palabras ignoradas guardadas a la parte actual
+                if len(ignored_buffer):
+                    names[state].extend(ignored_buffer)
+                    ignored_buffer.clear()
+                names[state].append(word)
 
-                name_parts[current_part].append(word)
             else:
-                append_to = current_part
-                if state is not self._NameParseState.SECOND_SURNAME:
-                    append_to += 1
-                name_parts[append_to].append(word)
+                ignored_buffer.append(word)
 
-        no_second_surname = self.segundo_apellido_valido('')
+        # TODO: Intregar ignored buffer restante al final
+        # print(ignored_buffer)
+        
+        valid = state is NameParseState.SECOND_SURNAME 
+        
+        if state is NameParseState.FIRST_SURNAME:
+            valid = self.segundo_apellido_vacio
+        elif state is NameParseState.GIVEN_NAMES:
+            valid = self.primer_apellido_vacio
 
-        if (state is self._NameParseState.SECOND_SURNAME
-            or (state is self._NameParseState.FIRST_SURNAME and no_second_surname)):
-
-            names_tuple = tuple([' '.join(x) for x in name_parts])
+        if valid:
+            names_list = [names[n] for n in NameParseState]
+            names_list[0:2] = [names_list[0] + names_list[1]]
+            names_tuple = tuple([' '.join(x) for x in names_list])
             return names_tuple
-        else:
-            return False
+       
+        return False
+    
+    def _validate_name_chars(self) -> bool:
+        """Valida que los caracteres correspondientes al nombre y apellidos
+        estén dentro del espacio correcto."""
+
+        consonants = WordFeatures._consonants
+        vowels = WordFeatures._vowels + 'X'
+        
+        name_chars = ((CURPChar.NAME_CHAR, CURPChar.NAME_CONSONANT),
+                      (CURPChar.SURNAME_A_CHAR, CURPChar.SURNAME_A_CONSONANT),
+                      (CURPChar.SURNAME_B_CHAR, CURPChar.SURNAME_B_CONSONANT))
+
+        valid = self.curp[CURPChar.SURNAME_A_VOWEL] in vowels
+        
+        for char, consonant in name_chars:
+            valid = valid and (self.curp[char] in string.ascii_uppercase and
+                    self.curp[consonant] in consonants)
+        
+        return valid
 
     def _parse_birth_date(self) -> date:
         """Obtiene la fecha de nacimiento de la CURP.
@@ -248,7 +286,7 @@ class CURP():
         :rtype: datetime.date
         """
         # Homonímia
-        # [1-9] para personas nacidas hasta el 1999
+        # [0-9] para personas nacidas hasta el 1999
         # [A-Z] para personas nacidas desde el 2000
         homonymy = self.curp[CURPChar.HOMONYMY]
         before_2k = homonymy in string.digits
@@ -305,7 +343,7 @@ class CURP():
         self._sex = sex
         return sex
 
-    def _parse_region(self) -> dict[str, str]:
+    def _parse_region(self) -> dict[str, Optional[str]]:
         """Obtiene la entidad federativa de nacimiento de la CURP.
 
         :raises ValueError: La CURP contiene un código de entidad incorrecto.
@@ -335,12 +373,9 @@ class CURP():
     @classmethod
     def _verification_sum(cls, curp: str) -> int:
         """Suma de verificación de la CURP."""
-        if 'Ñ' in curp:
-            raise CURPValueError("La CURP no puede contener 'Ñ'")
-
         try:
             r = sum([i * cls._CHARSET.index(x) for i, x in enumerate(curp[-2::-1], 2)])
-            # Asegurarse de que el digito de verificacion sea valido
+            # Asegurarse de que el dígito de verificación sea válido
             cls._CHARSET.index(curp[-1])
         except ValueError:
             raise CURPValueError("La CURP contiene caracteres no válidos.")
@@ -381,17 +416,17 @@ class CURP():
 
     @property
     def nombre(self) -> Optional[str]:
-        """Nombre que acompaña a la CURP."""
+        """Nombre con el que se construyó el objeto."""
         return self._name
 
     @property
     def primer_apellido(self) -> Optional[str]:
-        """Primer apellido que acompaña a la CURP."""
+        """Primer apellido con el que se construyó el objeto."""
         return self._first_surname
 
     @property
     def segundo_apellido(self) -> Optional[str]:
-        """Segundo apellido que acompaña a la CURP."""
+        """Segundo apellido con el que se construyó el objeto."""
         return self._second_surname
 
     @property
@@ -416,5 +451,16 @@ class CURP():
 
     @property
     def es_extranjero(self) -> bool:
-        """Booleano que indica si CURP pertenece a alguien nacido en el extranjero."""
-        return self._birth_place['iso'] == ""
+        """True si la CURP pertenece a alguien nacido en el extranjero."""
+        return not self._birth_place['iso']
+
+    @property
+    def primer_apellido_vacio(self) -> bool:
+        """True si la CURP puede corresponder a un primer apellido vacio."""
+        return self.primer_apellido_valido('')
+    
+    @property
+    def segundo_apellido_vacio(self) -> bool:
+        """True si la CURP puede corresponder a un segundo apellido vacio."""
+        return self.segundo_apellido_valido('')
+
