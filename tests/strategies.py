@@ -3,7 +3,8 @@
 import string
 from datetime import date
 from unidecode import unidecode
-from curpsuite import estados
+from curpsuite import CURP
+from curpsuite import estados, altisonantes
 from .utils import normalise_word, build_curp, FeaturedWord, CURPSkeleton
 from hypothesis import given
 from hypothesis.strategies import (sampled_from, composite, tuples,
@@ -18,7 +19,6 @@ class ASCIIStrats:
     def text(draw, cls, min_size: int = 0, max_size: int = None,
              lowercase: bool = True, uppercase: bool = True, digits: bool = True) -> str:
         """Genera texto ascii."""
-        word_len = draw(integers(min_size, max_size))
         charset = ""
 
         if digits:
@@ -28,7 +28,7 @@ class ASCIIStrats:
         if uppercase:
             charset += string.ascii_uppercase
 
-        t = ''.join([draw(sampled_from(charset)) for _ in range(word_len)])
+        t = ''.join(draw(lists(sampled_from(charset), min_size=min_size, max_size=max_size)))
         return t
 
     @classmethod
@@ -105,7 +105,10 @@ class CURPStrats:
     y sus atributos."""
 
     _regions = estados.estados
+    _altisonantes = altisonantes.altisonantes
     _sexes = ('H', 'M')
+    _consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
+    _vowels = 'AEIOUX'
 
     @classmethod
     @composite
@@ -113,24 +116,28 @@ class CURPStrats:
         """Estrategia que genera Claves Únicas de Registro de Población.
         :return: Dataclass que contiene la CURP y los datos de la misma."""
 
-        names = []
+        surnames = []
 
         # Generar nombre y dos apellidos
         w = draw(WordStrats.words(min_size=1))
-        names.append(w)
+        given_name = w
 
         for _ in range(2):
             w = draw(WordStrats.words())
-            names.append(w)
+            surnames.append(w)
+
+        # Asegurar que no existan casos en los que
+        # el primer apellido este vacío y el segundo no
+        surnames.sort(reverse=True, key=lambda obj: obj.word)
 
         sex = draw(cls.sexes())
         date = draw(cls.birth_dates())
         region = draw(cls.mexican_states())
 
         curp = build_curp(
-            name=names[0],
-            first_surname=names[1],
-            second_surname=names[2],
+            name=given_name,
+            first_surname=surnames[0],
+            second_surname=surnames[1],
             date=date,
             sex=sex[0],
             region=region[0]
@@ -138,10 +145,10 @@ class CURPStrats:
 
         sk = CURPSkeleton(
             curp=curp,
-            name=names[0].word,
-            first_surname=names[1].word,
-            second_surname=names[2].word,
-            features=names,
+            name=given_name.word,
+            first_surname=surnames[0].word,
+            second_surname=surnames[1].word,
+            features=[given_name, *surnames],
             birth_date=date,
             sex=sex[1],
             region=region[1]
@@ -177,3 +184,42 @@ class CURPStrats:
         k = draw(a)
         v = cls._regions[k]
         return (k, v)
+
+    @classmethod
+    @composite
+    def ignored_words(draw, cls) -> str:
+        """Palabras ignoradas en la CURP."""
+        return draw(sampled_from(CURP._ignored_words))
+
+    @classmethod
+    @composite
+    def ignored_names(draw, cls) -> str:
+        """Palabras ignoradas en la CURP."""
+        return draw(sampled_from(CURP._ignored_names))
+
+    @classmethod
+    @composite
+    def ignored_strings(draw, cls, min_size=0, max_size=None) -> str:
+        """Cadena de palabras ignoradas."""
+        return draw(lists(cls.ignored_words(), min_size=min_size, max_size=max_size).map(' '.join))
+
+    @classmethod
+    @composite
+    def inconvenient(draw, cls) -> str:
+        """Palabras inconvenientes de la CURP."""
+        k = draw(sampled_from(sorted(cls._altisonantes.keys())))
+        v = draw(sampled_from(cls._altisonantes[k]))
+        return f"{k[0]}{v}{k[2:]}"
+
+    @classmethod
+    @composite
+    def vowels(draw, cls) -> str:
+        """Vocales que pueden aparecer en la CURP."""
+        return draw(sampled_from(cls._vowels))
+
+    @classmethod
+    @composite
+    def consonants(draw, cls) -> str:
+        """Consonantes que pueden aparecer en la CURP."""
+        return draw(sampled_from(cls._consonants))
+

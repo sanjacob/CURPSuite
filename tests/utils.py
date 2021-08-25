@@ -56,6 +56,8 @@ class FeaturedWord:
                 self.consonant != other.consonant)
         return diff
 
+    def __repr__(self):
+        return f"<FeaturedWord [{self.word}]>"
 
 @dataclass(frozen=True)
 class CURPSkeleton:
@@ -110,8 +112,18 @@ def insert_in_word(word: str, c: str, i: int):
     """Reemplaza cierta sección de una string con otra string."""
     return f"{word[:i]}{c}{word[i + len(c):]}"
 
-def change_curp(curp: str, date: str = None, sex: str = None, region: str = None):
+def change_curp(curp: str, c: str = None, i: int = None, chars: str = None, consonants: str = None,
+                date: str = None, sex: str = None, region: str = None):
     """Permite el reemplazo de un elemento de una CURP."""
+    if c is not None and i is not None:
+        curp = insert_in_word(curp, c, i)
+
+    if chars is not None:
+        curp = insert_in_word(curp, chars, CURPChar.SURNAME_A_CHAR)
+
+    if consonants is not None:
+        curp = insert_in_word(curp, consonants, CURPChar.SURNAME_A_CONSONANT)
+
     if date is not None:
         curp = insert_in_word(curp, date, CURPChar.YEAR_0)
 
