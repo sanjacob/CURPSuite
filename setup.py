@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from setuptools import setup
-from curp.__about__ import (__title__, __version__, __summary__, __uri__, __author__, __email__, __license__)
+from curpsuite.__about__ import (__title__, __version__, __summary__, __uri__, __author__, __email__, __license__)
 
 setup(
     name=__title__,

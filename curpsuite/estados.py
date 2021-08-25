@@ -2,7 +2,15 @@
 Entidades de la República Mexicana y su código ISO
 """
 
-estados = {
+from typing import Optional, TypedDict
+
+
+class RegionData(TypedDict):
+    name: str
+    iso: Optional[str]
+
+
+estados: dict[str, RegionData] = {
   "AS": {
     "name": "Aguascalientes",
     "iso": "MX-AGU"

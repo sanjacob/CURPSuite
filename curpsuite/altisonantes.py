@@ -2,7 +2,9 @@
 Palabras inconvenientes censuradas, y las posibles vocales reales
 """
 
-altisonantes = {
+from typing import Union
+
+altisonantes: dict[str, Union[str, tuple[str, ...]]] = {
     "BXCA": ("A"),
     "BXKA": ("A"),
     "BXEI": ("U"),

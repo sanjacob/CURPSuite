@@ -13,6 +13,7 @@ sphinx = "*"
 recommonmark = "*"
 mypy = "*"
 tox = "*"
+twine = "*"
 
 [requires]
 python_version = "3.9"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-from .curpsuite import CURP, CURPValueError
+from .curp import CURP, CURPValueError
 
 def main() -> int:
     parser = argparse.ArgumentParser(
