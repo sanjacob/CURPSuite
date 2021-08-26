@@ -3,6 +3,8 @@
 Uso Básico de CURP Suite
 ========================
 
+.. image:: https://live.staticflickr.com/65535/51403951610_b6c029e619_b.jpg
+
 Analizar una CURP con CURP Suite es muy simple.
 
 Empieza importando la clase CURP

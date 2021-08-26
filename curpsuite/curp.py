@@ -155,6 +155,11 @@ class CURP():
         """Verifica que una CURP sea válida para cierto nombre de pila.
 
         :param str name: Nombre de pila para validar.
+
+        .. todo::
+
+            Averiguar si la regla de los nombres comunes aplica aún si hay palabras
+            ignoradas antes de ellos.
         """
         # Remover primer nombre si este es muy común
         pieces = name.upper().split()

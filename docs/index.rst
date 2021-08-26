@@ -51,13 +51,35 @@ Características
 Manual De Uso
 -------------
 
+Una explicación de como empezar a usar CURP Suite.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    install
    basics
+
+
+Documentación de API
+--------------------
+
+Documentación de la interfaz pública de CURP Suite.
+
+.. toctree::
+   :maxdepth: 2
+
    curp_class
+
+
+Contribuciones
+--------------
+
+Si quieres contribuir al proyecto, empieza aquí.
+
+.. toctree::
+   :maxdepth: 3
+
+   dev/contributing
 
 
 .. _ISO/IEC 5218: https://en.wikipedia.org/wiki/ISO/IEC_5218

@@ -37,7 +37,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.doctest',
     'sphinx.ext.autosectionlabel',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.viewcode',
+    'sphinx.ext.todo',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,6 +58,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 autoclass_content = 'both'
 autodoc_member_order = 'groupwise'
+
+todo_include_todos = True
 
 source_suffix = {
     '.rst': 'restructuredtext',
@@ -94,7 +97,8 @@ html_theme_options = {
     'github_button': True,
     'github_type': 'star',
     'description': __about__.__summary__,
-    'extra_nav_links': {'CURP Suite @ PyPI': 'https://pypi.com'}
+    'extra_nav_links': {'CURP Suite @ PyPI': 'https://pypi.com'},
+    'analytics_id': 'UA-109078714-2',
 }
 
 # html_sidebars = {
