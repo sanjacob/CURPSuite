@@ -3,6 +3,7 @@
 import argparse
 from .curp import CURP, CURPValueError
 
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         'curp',
@@ -30,6 +31,7 @@ def main() -> int:
         else:
             print(c.json())
     return 0
+
 
 if __name__ == '__main__':
     exit(main())

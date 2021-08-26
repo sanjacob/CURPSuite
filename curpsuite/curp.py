@@ -34,7 +34,8 @@ from . import altisonantes, estados
 from .exceptions import (CURPValueError, CURPLengthError,
                          CURPVerificationError, CURPNameError,
                          CURPFirstSurnameError, CURPSecondSurnameError,
-                         CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)
+                         CURPFullNameError, CURPDateError, CURPSexError,
+                         CURPRegionError)
 
 __all__ = ["CURP"]
 
@@ -53,7 +54,8 @@ class CURP():
     """
     _LENGTH = 18
     # str.index solo regresa la primera coincidencia
-    _CHARSET = f"{string.digits}{string.ascii_uppercase[:14]}N{string.ascii_uppercase[14:]}"
+    _CHARSET = f"{string.digits}{string.ascii_uppercase[:14]}"
+    _CHARSET += f"N{string.ascii_uppercase[14:]}"
 
     _ignored_words = ('DA', 'DAS', 'DE', 'DEL', 'DER', 'DI', 'DIE', 'DD',
                       'EL', 'LA', 'LOS', 'LAS', 'LE', 'LES', 'MAC', 'MC',
@@ -72,7 +74,8 @@ class CURP():
 
     # Para detectar si una CURP es inválida debido a estar sin censura,
     # crear lista de palabras sin censura
-    _inconvenient_uncensored = [f"{k[0]}{vowel}{k[2:]}" for k, vowels in _inconvenient.items() for vowel in vowels]
+    _inc_uncensored = [f"{k[0]}{vowel}{k[2:]}"
+                       for k, vowels in _inconvenient.items() for vowel in vowels]
 
     class _NameParseState(Enum):
         """Indica el progreso al comparar un nombre completo con una CURP."""
@@ -138,8 +141,9 @@ class CURP():
             else:
                 raise CURPSecondSurnameError('El segundo apellido no coincide con la CURP')
 
-        if (nombre is primer_apellido is segundo_apellido is None
-            and nombre_completo is not None):
+        no_pieces = nombre is primer_apellido is segundo_apellido is None
+
+        if no_pieces and nombre_completo is not None:
             names = self.nombre_completo_valido(nombre_completo)
 
             if names:
@@ -232,7 +236,7 @@ class CURP():
 
         # Guarda preposiciones y otras palabras ignoradas
         # hasta encontrar siguiente palabra normal
-        ignored_buffer : list[str] = []
+        ignored_buffer: list[str] = []
 
         for word in nombre_completo.split():
             if unidecode(word.upper()) not in self._ignored_words:
@@ -283,9 +287,9 @@ class CURP():
 
         for char, consonant in name_chars:
             valid = valid and (self.curp[char] in string.ascii_uppercase and
-                    self.curp[consonant] in consonants)
+                               self.curp[consonant] in consonants)
 
-        if self.curp[:CURPChar.NAME_CHAR + 1] in self._inconvenient_uncensored:
+        if self.curp[:CURPChar.NAME_CHAR + 1] in self._inc_uncensored:
             valid = False
 
         return valid
@@ -347,7 +351,7 @@ class CURP():
         :rtype: int
         """
         curp_sex = self.curp[CURPChar.SEX]
-        sex : Literal[0, 1, 2] = self._sexes.get(curp_sex, 0)
+        sex: Literal[0, 1, 2] = self._sexes.get(curp_sex, 0)
 
         if not sex:
             raise CURPSexError("El sexo de la CURP no es válido")
@@ -475,4 +479,3 @@ class CURP():
     def segundo_apellido_vacio(self) -> bool:
         """True si la CURP puede corresponder a un segundo apellido vacio."""
         return self.segundo_apellido_valido('')
-

@@ -49,3 +49,9 @@ from .exceptions import (CURPValueError, CURPLengthError,
                          CURPVerificationError, CURPNameError,
                          CURPFirstSurnameError, CURPSecondSurnameError,
                          CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)
+
+__all__ = ['__title__', '__summary__', '__uri__', '__version__',
+           '__author__', '__email__', '__license__', '__copyright__',
+           'CURP', 'CURPValueError', 'CURPLengthError', 'CURPVerificationError',
+           'CURPNameError', 'CURPFirstSurnameError', 'CURPSecondSurnameError',
+           'CURPFullNameError', 'CURPDateError', 'CURPSexError', 'CURPRegionError']

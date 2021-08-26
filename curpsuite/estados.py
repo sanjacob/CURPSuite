@@ -141,6 +141,6 @@ estados: dict[str, RegionData] = {
   },
   "NE": {
     "name": "Extranjero",
-    "iso": None 
+    "iso": None
   }
 }
