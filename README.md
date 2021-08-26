@@ -26,8 +26,10 @@ CURP Suite te permite extraer toda la información que contiene una CURP de form
 ##### Desde PyPI
 
 ```bash
-$ python -m pip install CURPSuite
+$ python3 -m pip install CURPSuite
 ```
+
+CURP Suite soporta Python 3.9+.
 
 
 
@@ -41,6 +43,12 @@ $ python -m pip install CURPSuite
 - Validación con nombres y apellidos
 - Validación con nombre completo
 - Interfaz de Línea de Comandos
+
+
+
+## Documentación
+
+Disponible en https://curpsuite.readthedocs.io
 
 
 

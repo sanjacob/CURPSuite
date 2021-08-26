@@ -7,18 +7,19 @@ Referencia de API
 CURP
 ----
 
-.. autoclass:: curp.CURP
+.. autoclass:: curpsuite.CURP
   :inherited-members:
 
 Excepciones
 -----------
 
-.. autoexception:: curp.CURPValueError
-.. autoexception:: curp.CURPLengthError
-.. autoexception:: curp.CURPVerificationError
-.. autoexception:: curp.CURPNameError
-.. autoexception:: curp.CURPFirstSurnameError
-.. autoexception:: curp.CURPSecondSurnameError
-.. autoexception:: curp.CURPDateError
-.. autoexception:: curp.CURPSexError
-.. autoexception:: curp.CURPRegionError
+.. autoexception:: curpsuite.CURPValueError
+.. autoexception:: curpsuite.CURPLengthError
+.. autoexception:: curpsuite.CURPVerificationError
+.. autoexception:: curpsuite.CURPNameError
+.. autoexception:: curpsuite.CURPFirstSurnameError
+.. autoexception:: curpsuite.CURPSecondSurnameError
+.. autoexception:: curpsuite.CURPFullNameError
+.. autoexception:: curpsuite.CURPDateError
+.. autoexception:: curpsuite.CURPSexError
+.. autoexception:: curpsuite.CURPRegionError

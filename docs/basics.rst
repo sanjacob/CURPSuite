@@ -155,7 +155,7 @@ de la validación falla.
 +------------------------------+--------------------------------------------+
 | Excepción                    | Lanzada Cuando                             |
 +==============================+============================================+
-| CURPValueError               | La composición de la CURP es incorrecta.   |
+| CURPValueError [2]_          | La composición de la CURP es incorrecta.   |
 +------------------------------+--------------------------------------------+
 | CURPLengthError              | CURP no tiene 18 carácteres.               |
 +------------------------------+--------------------------------------------+
@@ -167,9 +167,9 @@ de la validación falla.
 +------------------------------+--------------------------------------------+
 | CURPSecondSurnameError [1]_  | Segundo apellido no corresponde a la CURP. |
 +------------------------------+--------------------------------------------+
-| CURPFullNameError [1]_       | Nombre completo no corresponde a la CURP.  | 
+| CURPFullNameError [1]_       | Nombre completo no corresponde a la CURP.  |
 +------------------------------+--------------------------------------------+
-| CURPDateError                | Fecha es incorrecta.                       |
+| CURPDateError                | Fecha es numérica pero incorrecta.         |
 +------------------------------+--------------------------------------------+
 | CURPSexError                 | Sexo no es `H` o `M`.                      |
 +------------------------------+--------------------------------------------+
@@ -192,7 +192,13 @@ Para atrapar cualquier excepción:
 
 
 .. [1] Solo levantadas si se crea la CURP con nombres/apellidos como argumentos.
+.. [2] Levantada por múltiples motivos, dentro de los cuales están:
 
+   - La CURP contiene caracteres no alfanuméricos.
+   - Uno de los caracteres correspondientes al nombre / apellidos
+     contiene un valor inapropiado (e.g. vocal cuando debe ser consonante).
+   - La CURP contiene una palabra altisonante cuando no debería.
+   - La fecha contiene al menos un carácter que no es numérico.
 
 Interfaz de Línea de Comandos
 -----------------------------
