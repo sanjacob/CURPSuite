@@ -5,12 +5,15 @@ Instalación de CURP Suite
 
 El primer paso para usar CURP Suite es instalarlo.
 
+
 $ python3 -m pip install curpsuite
 ----------------------------------
 
 Para instalar CURP Suite, simplemente usa este comando en la terminal::
 
     $ python3 -m pip install curpsuite
+
+CURP Suite es compatible con Python 3.8 en adelante.
 
 
 Obtener el Código Fuente

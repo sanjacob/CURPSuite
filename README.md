@@ -1,5 +1,7 @@
 # CURP Suite
 
+[![PyPI Version][version-badge]][pypi] [![Build][build-badge]][actions] [![License: GPL  v2][license-badge]][gnu] [![ReadTheDocs][docs-badge]][rtd]
+
 **CURP Suite** es una librería de análisis y validación de la CURP Mexicana.
 
 ```python
@@ -29,7 +31,7 @@ CURP Suite te permite extraer toda la información que contiene una CURP de form
 $ python3 -m pip install CURPSuite
 ```
 
-CURP Suite soporta Python 3.9+.
+CURP Suite soporta Python 3.8+.
 
 
 
@@ -67,3 +69,11 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], más informaci�
 [pipenv]: https://pipenv.pypa.io/en/latest/ "Pipenv"
 [license]: LICENSE "General Public License"
 [gnu]: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html "Free Software Foundation"
+[pypi]: https://pypi.org/project/CURPSuite
+[license-badge]: https://img.shields.io/github/license/jacobszpz/CURPSuite
+[version-badge]: https://img.shields.io/pypi/v/CURPSuite
+[python-version-badge]: https://img.shields.io/pypi/pyversions/CURPSuite
+[build-badge]: https://img.shields.io/github/workflow/status/jacobszpz/CURPSuite/Python%20CI/master
+[actions]: https://github.com/jacobszpz/CURPSuite/actions
+[docs-badge]: https://img.shields.io/readthedocs/curpsuite
+[rtd]: https://curpsuite.readthedocs.io

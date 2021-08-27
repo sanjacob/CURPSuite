@@ -6,8 +6,17 @@
 CURP Suite: CURP para Humanos
 ================================
 
-.. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
+.. image:: https://img.shields.io/pypi/v/CURPSuite
+    :target: https://pypi.org/project/CURPSuite
+
+.. image:: https://img.shields.io/github/workflow/status/jacobszpz/CURPSuite/Python%20CI/master
+    :target: https://github.com/jacobszpz/CURPSuite/actions
+
+.. image:: https://img.shields.io/github/license/jacobszpz/CURPSuite
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+.. image:: https://img.shields.io/readthedocs/curpsuite
+    :target: https://curpsuite.readthedocs.io
 
 **CURP Suite** es una librería de análisis y validación de la
 :abbr:`CURP (Clave Única de Registro de Población)` Mexicana para Python.

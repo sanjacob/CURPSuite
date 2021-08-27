@@ -90,14 +90,14 @@ html_theme = 'alabaster'
 html_theme_options = {
     'show_powered_by': False,
     'github_user': 'jacobszpz',
-    'github_repo': 'CURPValidator',
+    'github_repo': 'CURPSuite',
     'github_banner': True,
     'show_related': False,
     'note_bg': '#FFF59C',
     'github_button': True,
     'github_type': 'star',
     'description': __about__.__summary__,
-    'extra_nav_links': {'CURP Suite @ PyPI': 'https://pypi.com'},
+    'extra_nav_links': {'CURP Suite @ PyPI': 'https://pypi.org/project/CURPSuite'},
     'analytics_id': 'UA-109078714-2',
 }
 
