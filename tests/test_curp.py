@@ -434,6 +434,7 @@ class TestCURP(unittest.TestCase):
                                                      pre_name: str, pre_surname_a: str, pre_surname_b: str):
         """Prueba la validación del nombre completo."""
         assume(not self.word_ignored(sk.name))
+        assume(not self.name_ignored(sk.name))
         assume(not self.word_ignored(sk.first_surname))
         assume(not self.word_ignored(sk.second_surname))
         assume(sk.features[1] != post_name)

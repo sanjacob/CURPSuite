@@ -19,7 +19,7 @@ Uso básico:
     >>> c.entidad_nacimiento_iso
     'MX-CMX'
 
-La documentación completa se encuentra en <https://curp.readthedocs.io>.
+La documentación completa se encuentra en <https://curpsuite.readthedocs.io>.
 
 :copyright: (c) 2021, Jacob Sánchez Pérez.
 :license: GPL v2.0, ver LICENSE para más detalles.
