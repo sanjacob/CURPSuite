@@ -3,8 +3,8 @@
 import string
 from datetime import date
 from unidecode import unidecode
-from curpsuite import CURP
-from curpsuite import estados, altisonantes
+from curp import CURP
+from curp import estados, altisonantes
 from .utils import normalise_word, build_curp, FeaturedWord, CURPSkeleton
 from hypothesis import given
 from hypothesis.strategies import (sampled_from, composite, tuples,

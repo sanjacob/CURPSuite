@@ -14,7 +14,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-from curpsuite import __about__
+from curp import __about__
 
 # -- Project information -----------------------------------------------------
 

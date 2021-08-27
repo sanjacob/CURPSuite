@@ -11,7 +11,7 @@ Empieza importando la clase CURP
 
 .. doctest::
 
-    >>> from curpsuite import CURP
+    >>> from curp import CURP
 
 Ahora, intentemos analizar una CURP. Para este ejemplo, usaremos la CURP de una
 mujer hipotética llamada Concepción Salgado Briseño, nacida el 26 de Junio de 1956,
@@ -186,7 +186,7 @@ Para atrapar cualquier excepción:
 
 .. doctest::
 
-    >>> from curpsuite import CURP, CURPValueError
+    >>> from curp import CURP, CURPValueError
     >>> try:
     ...     c = CURP("SABC560626MDFLRN01")
     ... except CURPValueError:

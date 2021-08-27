@@ -29,7 +29,7 @@ __all__ = [
     "__copyright__",
 ]
 
-__title__ = "CURP Suite"
+__title__ = "CURPSuite"
 __summary__ = "Análisis y validación de la CURP Mexicana"
 __uri__ = "https://github.com/jacobszpz/CURPSuite"
 

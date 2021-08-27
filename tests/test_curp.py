@@ -29,10 +29,10 @@ import string
 from typing import Union
 from datetime import date
 from unidecode import unidecode
-from curpsuite.curp import WordFeatures
-from curpsuite.chars import CURPChar
-from curpsuite import CURP, estados, altisonantes
-from curpsuite import (CURPValueError, CURPLengthError,
+from curp.curp import WordFeatures
+from curp.chars import CURPChar
+from curp import CURP, estados, altisonantes
+from curp import (CURPValueError, CURPLengthError,
                   CURPVerificationError, CURPNameError,
                   CURPFirstSurnameError, CURPSecondSurnameError,
                   CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)

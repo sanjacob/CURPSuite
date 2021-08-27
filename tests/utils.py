@@ -3,9 +3,9 @@
 from datetime import date
 from unidecode import unidecode
 from dataclasses import dataclass
-from curpsuite import CURP
-from curpsuite.chars import CURPChar
-from curpsuite.altisonantes import altisonantes
+from curp import CURP
+from curp.chars import CURPChar
+from curp.altisonantes import altisonantes
 
 
 class FeaturedWord:

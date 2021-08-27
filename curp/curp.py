@@ -47,7 +47,7 @@ class CURP():
 
     Uso::
 
-        >>> from curpsuite import CURP
+        >>> from curp import CURP
         >>> c = CURP("SABC560626MDFLRN01")
         >>> c
         <CURP [SABC]>
