@@ -2,6 +2,8 @@
 Entidades de la República Mexicana y su código ISO
 """
 
+from __future__ import annotations
+
 from typing import Optional, TypedDict
 
 

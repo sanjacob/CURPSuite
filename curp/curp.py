@@ -20,6 +20,7 @@ Análisis y validación de la CURP mexicana.
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 
+from __future__ import annotations
 
 import json
 import string
@@ -473,7 +474,10 @@ class CURP():
     @property
     def primer_apellido_vacio(self) -> bool:
         """True si la CURP puede corresponder a un primer apellido vacio."""
-        return self.primer_apellido_valido('')
+        # Asumir que si existe un segundo apellido, el primero también debe
+        # existir, incluso si aparenta no hacerlo
+        segundo_vacio = self.segundo_apellido_vacio
+        return segundo_vacio and self.primer_apellido_valido('')
 
     @property
     def segundo_apellido_vacio(self) -> bool:

@@ -15,6 +15,8 @@
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
 
+from __future__ import annotations
+
 from unidecode import unidecode
 from functools import partialmethod
 

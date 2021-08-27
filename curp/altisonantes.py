@@ -2,6 +2,8 @@
 Palabras inconvenientes censuradas, y las posibles vocales reales
 """
 
+from __future__ import annotations
+
 from typing import Union
 
 altisonantes: dict[str, Union[str, tuple[str, ...]]] = {
