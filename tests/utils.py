@@ -46,16 +46,16 @@ class FeaturedWord:
     def consonant(self) -> str:
         return self._consonant
 
-    def loosely_not_equal(self, other: 'FeaturedWord') -> bool:
-        """Compara aproximadamente si no tiene las mismas características que otra palabra."""
-        diff = (self.char != other.char or
-                self.consonant != other.consonant)
+    def loosely_eq(self, other: 'FeaturedWord') -> bool:
+        """Compara aproximadamente si tiene las mismas características que otra palabra."""
+        diff = (self.char == other.char and
+                self.consonant == other.consonant)
         return diff
 
-    def __ne__(self, other):
-        diff = (self.char != other.char or
-                self.vowel != other.vowel or
-                self.consonant != other.consonant)
+    def __eq__(self, other) -> bool:
+        diff = (self.char == other.char and
+                self.vowel == other.vowel and
+                self.consonant == other.consonant)
         return diff
 
     def __repr__(self):
