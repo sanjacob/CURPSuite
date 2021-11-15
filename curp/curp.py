@@ -25,7 +25,7 @@ from __future__ import annotations
 import json
 import string
 from datetime import date
-from enum import Enum, auto
+from enum import Enum, IntEnum, auto
 from unidecode import unidecode
 from typing import Optional, Union, Literal
 
@@ -39,6 +39,15 @@ from .exceptions import (CURPValueError, CURPLengthError,
                          CURPRegionError)
 
 __all__ = ["CURP"]
+
+
+class Sexo(IntEnum):
+    DESCONOCIDO = 0
+    HOMBRE = 1
+    MUJER = 2
+
+    def __str__(self) -> str:
+        return self.name[0]
 
 
 class CURP():
@@ -65,7 +74,7 @@ class CURP():
     _ignored_names = ('MARIA', 'MA', 'MA.', 'JOSE', 'J', 'J.')
 
     # Sexos
-    _sexes: dict[str, Literal[1, 2]] = {'H': 1, 'M': 2}
+    _sexes: dict[str, Sexo] = {'H': Sexo.HOMBRE, 'M': Sexo.MUJER}
 
     # Abreviaciones de los estados en la CURP
     _regions = estados.estados
@@ -344,7 +353,7 @@ class CURP():
         self._birth_date = birth_date
         return birth_date
 
-    def _parse_sex(self) -> Literal[1, 2]:
+    def _parse_sex(self) -> Sexo:
         """Obtiene el sexo de la CURP.
 
         :raises ValueError: El sexo en la CURP es incorrecto.
@@ -352,7 +361,7 @@ class CURP():
         :rtype: int
         """
         curp_sex = self.curp[CURPChar.SEX]
-        sex: Literal[0, 1, 2] = self._sexes.get(curp_sex, 0)
+        sex: Sexo = self._sexes.get(curp_sex, Sexo.DESCONOCIDO)
 
         if not sex:
             raise CURPSexError("El sexo de la CURP no es válido")
@@ -452,7 +461,7 @@ class CURP():
         return self._birth_date
 
     @property
-    def sexo(self) -> Literal[1, 2]:
+    def sexo(self) -> Sexo:
         """Sexo extraído de la CURP."""
         return self._sex
 

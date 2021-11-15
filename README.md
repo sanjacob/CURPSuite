@@ -1,6 +1,6 @@
 # CURP Suite
 
-[![PyPI Version][version-badge]][pypi] [![Build][build-badge]][actions] [![License: GPL  v2][license-badge]][gnu] [![ReadTheDocs][docs-badge]][rtd]
+[![PyPI Version][version-badge]][pypi] [![Python versions][python-version-badge]][pypi] [![License: GPL  v2][license-badge]][gnu] [![Build][build-badge]][actions] [![ReadTheDocs][docs-badge]][rtd] [![Downloads per month][downloads-badge]][pypi-stats]
 
 **CURP Suite** es una librería de análisis y validación de la CURP Mexicana.
 
@@ -10,11 +10,12 @@
 >>> c.fecha_nacimiento
 datetime.date(1956, 6, 26)
 >>> c.sexo
-2
+<Sexo.MUJER: 2>
 >>> c.entidad
 'Ciudad de México'
 >>> c.nombre_valido("Concepción")
 True
+
 ```
 
 
@@ -39,7 +40,7 @@ CURP Suite soporta Python 3.8+.
 
 - Extracción de datos
   - Fecha de nacimiento como objeto `datetime.date`
-  - Sexo de acuerdo a [ISO/IEC 5218][iso5218]
+  - Sexo compatible con [ISO/IEC 5218][iso5218]
   - Nombre y clave [ISO 3166-2][iso3166] de la entidad federativa de nacimiento
 - Representación JSON de datos extraídos
 - Validación con nombres y apellidos
@@ -50,13 +51,13 @@ CURP Suite soporta Python 3.8+.
 
 ## Documentación
 
-Disponible en https://curpsuite.readthedocs.io
+Disponible en https://curpsuite.readthedocs.io.
 
 
 
 ## Licencia
 
-Este programa se distribuye bajo la licencia [GPLv2.0][license], más información en el sitio de la [Free Software Foundation][gnu]
+Este programa se distribuye bajo la licencia [GPLv2.0][license], más información en el sitio de la [Free Software Foundation][gnu].
 
 
 
@@ -77,3 +78,6 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], más informaci�
 [actions]: https://github.com/jacobszpz/CURPSuite/actions
 [docs-badge]: https://img.shields.io/readthedocs/curpsuite
 [rtd]: https://curpsuite.readthedocs.io
+[rtd-changelog]: https://curpsuite.readthedocs.io/es/latest/CHANGELOG.html
+[downloads-badge]: https://img.shields.io/pypi/dm/curpsuite
+[pypi-stats]: https://pypistats.org/packages/curpsuite

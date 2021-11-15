@@ -44,7 +44,7 @@ La documentación completa se encuentra en <https://curpsuite.readthedocs.io>.
 from .__about__ import __title__, __summary__, __uri__, __version__
 from .__about__ import __author__, __email__, __license__
 from .__about__ import __copyright__
-from .curp import CURP
+from .curp import CURP, Sexo
 from .exceptions import (CURPValueError, CURPLengthError,
                          CURPVerificationError, CURPNameError,
                          CURPFirstSurnameError, CURPSecondSurnameError,
@@ -52,6 +52,6 @@ from .exceptions import (CURPValueError, CURPLengthError,
 
 __all__ = ['__title__', '__summary__', '__uri__', '__version__',
            '__author__', '__email__', '__license__', '__copyright__',
-           'CURP', 'CURPValueError', 'CURPLengthError', 'CURPVerificationError',
+           'CURP', 'Sexo', 'CURPValueError', 'CURPLengthError', 'CURPVerificationError',
            'CURPNameError', 'CURPFirstSurnameError', 'CURPSecondSurnameError',
            'CURPFullNameError', 'CURPDateError', 'CURPSexError', 'CURPRegionError']
