@@ -9,14 +9,21 @@ CURP Suite: CURP para Humanos
 .. image:: https://img.shields.io/pypi/v/CURPSuite
     :target: https://pypi.org/project/CURPSuite
 
-.. image:: https://img.shields.io/github/workflow/status/jacobszpz/CURPSuite/Python%20CI/master
-    :target: https://github.com/jacobszpz/CURPSuite/actions
+.. image:: https://img.shields.io/pypi/pyversions/CURPSuite
+    :target: https://pypi.org/project/CURPSuite
 
 .. image:: https://img.shields.io/github/license/jacobszpz/CURPSuite
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
+.. image:: https://img.shields.io/github/workflow/status/jacobszpz/CURPSuite/Python%20CI/master
+    :target: https://github.com/jacobszpz/CURPSuite/actions
+
 .. image:: https://img.shields.io/readthedocs/curpsuite
     :target: https://curpsuite.readthedocs.io
+
+.. image:: https://img.shields.io/pypi/dm/curpsuite
+    :target: https://pypistats.org/packages/curpsuite
+
 
 **CURP Suite** es una librería de análisis y validación de la
 :abbr:`CURP (Clave Única de Registro de Población)` Mexicana para Python.
@@ -30,7 +37,7 @@ CURP Suite: CURP para Humanos
     >>> c.fecha_nacimiento
     datetime.date(1956, 6, 26)
     >>> c.sexo
-    2
+    <Sexo.MUJER: 2>
     >>> c.entidad
     'Ciudad de México'
     >>> c.nombre_valido("Concepción")
@@ -48,7 +55,7 @@ Características
 - Extracción de datos
 
   - Fecha de nacimiento como objeto :class:`datetime.date`
-  - Sexo de acuerdo a `ISO/IEC 5218`_
+  - Sexo compatible con `ISO/IEC 5218`_
   - Nombre y clave `ISO 3166-2`_ de la entidad federativa de nacimiento
 
 - Representación JSON de datos extraídos
@@ -88,6 +95,7 @@ Si quieres contribuir al proyecto, empieza aquí.
 .. toctree::
    :maxdepth: 3
 
+   CHANGELOG
    dev/contributing
 
 

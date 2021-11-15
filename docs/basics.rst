@@ -29,15 +29,27 @@ Los datos que haya tenido la CURP pueden ser accesados como propiedades del obje
     >>> c.fecha_nacimiento
     datetime.date(1956, 6, 26)
     >>> c.sexo
-    2
+    <Sexo.MUJER: 2>
     >>> c.entidad
     'Ciudad de México'
     >>> c.entidad_iso
     'MX-CMX'
 
-La fecha de nacimiento será convertida a un objeto :class:`datetime.date`. Mientras que
-el sexo será representado de acuerdo a `ISO/IEC 5218`_, es decir, ``1`` para sexo
-masculino, ``2`` para sexo femenino. Por último, la entidad federativa de nacimiento
+La fecha de nacimiento será convertida a un objeto :class:`datetime.date`.
+Mientras que el sexo será representado por un :class:`IntEnum <enum.IntEnum>` compatible
+con `ISO/IEC 5218`_, es decir, ``1`` para sexo masculino, ``2`` para sexo femenino.
+
+Se puede comparar el sexo de la siguiente forma.
+
+.. doctest::
+
+   >>> from curp import Sexo
+   >>> c.sexo is Sexo.MUJER
+   True
+   >>> str(c.sexo)
+   'M'
+
+Por último, la entidad federativa de nacimiento
 podrá ser obtenida tanto como nombre común o como clave `ISO 3166-2`_.
 
 Representación JSON
