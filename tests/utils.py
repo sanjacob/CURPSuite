@@ -10,7 +10,7 @@ from curp.chars import CURPChar
 from curp.altisonantes import altisonantes
 
 
-class FeaturedWord:
+class FeaturedWord(str):
     """Similar a :class:`WordFeatures` pero las posiciones de las características
     son especificadas al crear el objeto.
 
@@ -21,18 +21,15 @@ class FeaturedWord:
 
     Si alguna de las posiciones es -1 la característica asignada será "X"
     """
-    def __init__(self, word="", char=0, vowel=1, consonant=2):
-        self._word = word
+
+    def __new__(cls, word="", char: int = 0, vowel: int = 1, consonant: int = 2):
+        obj = str.__new__(cls, word)
         w = normalise_word(word)
         assert len(w) > max(vowel, consonant)
-
-        self._char = w[char] if w else "X"
-        self._vowel = w[vowel] if vowel != -1 else "X"
-        self._consonant = w[consonant] if consonant != -1 else "X"
-
-    @property
-    def word(self) -> str:
-        return self._word
+        obj._char = w[char] if w else "X"
+        obj._vowel = w[vowel] if vowel != -1 else "X"
+        obj._consonant = w[consonant] if consonant != -1 else "X"
+        return obj
 
     @property
     def char(self) -> str:
@@ -52,23 +49,31 @@ class FeaturedWord:
                 self.consonant == other.consonant)
         return diff
 
-    def __eq__(self, other) -> bool:
-        diff = (self.char == other.char and
-                self.vowel == other.vowel and
-                self.consonant == other.consonant)
-        return diff
+    def __eq__(self, other: Any) -> bool:
+        if isinstance(other, FeaturedWord):
+            diff = (self.char == other.char and
+                    self.vowel == other.vowel and
+                    self.consonant == other.consonant)
+            return diff
+        elif isinstance(other, str):
+            return str(self) == other
+        else:
+            return NotImplemented
 
-    def __repr__(self):
-        return f"<FeaturedWord [{self.word}]>"
+    def __ne__(self, other: Any) -> bool:
+        return not self == other
+
+    def __repr__(self) -> str:
+        return f"<FeaturedWord [{self}]>"
+
 
 @dataclass(frozen=True)
 class CURPSkeleton:
     """Holds data that belongs to a CURP."""
     curp: str
-    name: str
-    first_surname: str
-    second_surname: str
-    features: list[FeaturedWord]
+    name: FeaturedWord
+    first_surname: FeaturedWord
+    second_surname: FeaturedWord
     birth_date: date
     sex: int
     region: dict[str, str]

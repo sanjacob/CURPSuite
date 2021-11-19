@@ -130,7 +130,7 @@ class CURPStrats:
 
         # Asegurar que no existan casos en los que
         # el primer apellido este vacío y el segundo no
-        surnames.sort(reverse=True, key=lambda obj: obj.word)
+        surnames.sort(reverse=True)
 
         sex = draw(cls.sexes())
         date = draw(cls.birth_dates())
@@ -147,10 +147,9 @@ class CURPStrats:
 
         sk = CURPSkeleton(
             curp=curp,
-            name=given_name.word,
-            first_surname=surnames[0].word,
-            second_surname=surnames[1].word,
-            features=[given_name, *surnames],
+            name=given_name,
+            first_surname=surnames[0],
+            second_surname=surnames[1],
             birth_date=date,
             sex=sex[1],
             region=region[1]
@@ -224,4 +223,3 @@ class CURPStrats:
     def consonants(draw, cls) -> str:
         """Consonantes que pueden aparecer en la CURP."""
         return draw(sampled_from(cls._consonants))
-

@@ -39,6 +39,7 @@ from curp import (CURPValueError, CURPLengthError,
                   CURPFirstSurnameError, CURPSecondSurnameError,
                   CURPFullNameError, CURPDateError, CURPSexError, CURPRegionError)
 
+curps = CURPStrats.curps
 
 class TestCURP(unittest.TestCase):
     """Pruebas de la clase CURP."""
@@ -53,19 +54,19 @@ class TestCURP(unittest.TestCase):
     # Pruebas que requieren que la construcción del objeto falle
 
     @given(st.text(max_size=17))
-    def test_creation_curp_too_short(self, curp: str) -> None:
+    def test_creation_curp_too_short(self, curp: str):
         """Probar que una CURP muy corta genere error."""
         with self.assertRaises(CURPLengthError):
             CURP(curp)
 
     @given(st.text(min_size=19))
-    def test_creation_curp_too_long(self, curp: str) -> None:
+    def test_creation_curp_too_long(self, curp: str):
         """Probar que una CURP muy larga genere error."""
         with self.assertRaises(CURPLengthError):
             CURP(curp)
 
-    @given(CURPStrats.curps())
-    def test_creation_verification_digit_check(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_creation_verification_digit_check(self, sk: CURPSkeleton):
         """Probar que sólo un dígito de verificación sea válido para cada CURP."""
         d = int(sk.curp[-1])
         for i in range(10):
@@ -75,8 +76,8 @@ class TestCURP(unittest.TestCase):
             else:
                 CURP(sk.curp)
 
-    @given(CURPStrats.curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
-    def test_creation_surname_a_char_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
+    def test_creation_surname_a_char_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         curp = change_curp(sk.curp, c, CURPChar.SURNAME_A_CHAR)
 
@@ -85,8 +86,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), CURPStrats.consonants())
-    def test_creation_surname_a_vowel_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), CURPStrats.consonants())
+    def test_creation_surname_a_vowel_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         assume(c != 'X')
         curp = change_curp(sk.curp, c, CURPChar.SURNAME_A_VOWEL)
@@ -96,8 +97,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), CURPStrats.vowels())
-    def test_creation_surname_a_consonant_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), CURPStrats.vowels())
+    def test_creation_surname_a_consonant_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         assume(c != 'X')
         curp = change_curp(sk.curp, c, CURPChar.SURNAME_A_CONSONANT)
@@ -107,8 +108,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
-    def test_creation_surname_b_char_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
+    def test_creation_surname_b_char_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         curp = change_curp(sk.curp, c, CURPChar.SURNAME_B_CHAR)
 
@@ -117,8 +118,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), CURPStrats.vowels())
-    def test_creation_surname_b_consonant_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), CURPStrats.vowels())
+    def test_creation_surname_b_consonant_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         assume(c != 'X')
         curp = change_curp(sk.curp, c, CURPChar.SURNAME_B_CONSONANT)
@@ -128,8 +129,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
-    def test_creation_name_char_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), ASCIIStrats.characters(lowercase=False, uppercase=False))
+    def test_creation_name_char_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         curp = change_curp(sk.curp, c, CURPChar.NAME_CHAR)
 
@@ -138,8 +139,8 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), CURPStrats.vowels())
-    def test_creation_name_consonant_error(self, sk: CURPSkeleton, c: str) -> None:
+    @given(curps(), CURPStrats.vowels())
+    def test_creation_name_consonant_error(self, sk: CURPSkeleton, c: str):
         """Prueba caracteres de nombre/apellidos incorrectos en la CURP."""
         assume(c != 'X')
         curp = change_curp(sk.curp, c, CURPChar.NAME_CONSONANT)
@@ -149,54 +150,53 @@ class TestCURP(unittest.TestCase):
 
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_creation_name_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_creation_name_error(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un nombre de pila incorrecto."""
         # Asumir que el nombre falso no tenga la misma letra inicial
         # y primera consonante interna que el nombre real
-        assume(not fake_name.loosely_eq(sk.features[0]))
+        assume(not fake_name.loosely_eq(sk.name))
 
         with self.assertRaises(CURPNameError):
-            c = CURP(sk.curp, nombre=fake_name.word)
+            c = CURP(sk.curp, nombre=fake_name)
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_creation_first_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_creation_first_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un primer apellido incorrecto."""
         # Asumir que el nombre falso no tenga
         # las mismas caracteristicas que el nombre real
-        assume(fake_name != sk.features[1])
+        assume(fake_name != sk.first_surname)
 
         with self.assertRaises(CURPFirstSurnameError):
-            c = CURP(sk.curp, primer_apellido=fake_name.word)
+            c = CURP(sk.curp, primer_apellido=fake_name)
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_creation_second_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_creation_second_surname_error(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un primer apellido incorrecto."""
         # Asumir que el nombre falso no tenga la misma letra inicial
         # y primera consonante interna que el nombre real
-        assume(not fake_name.loosely_eq(sk.features[2]))
+        assume(not fake_name.loosely_eq(sk.second_surname))
 
         with self.assertRaises(CURPSecondSurnameError):
-            c = CURP(sk.curp, segundo_apellido=fake_name.word)
+            c = CURP(sk.curp, segundo_apellido=fake_name)
 
-    @given(CURPStrats.curps(), st.tuples(WordStrats.words(min_size=1), WordStrats.words(), WordStrats.words()))
-    def test_creation_full_name_error(self, sk: CURPSkeleton, fake_names_tuple: tuple[FeaturedWord]) -> None:
+    @given(curps(), st.tuples(WordStrats.words(min_size=1), WordStrats.words(), WordStrats.words()))
+    def test_creation_full_name_error(self, sk: CURPSkeleton, fake_names_tuple: tuple[FeaturedWord]):
         """Prueba la creación de una CURP con un nombre completo incorrecto."""
         assume(sk.first_surname != '')
         assume(sk.second_surname != '')
 
-        fake_names = sorted(fake_names_tuple, reverse=True, key=lambda obj: obj.word)
-        # print([n.word for n in fake_names])
-        # print(sk.full_name)
-        names_different = (not fake_names[0].loosely_eq(sk.features[0]) or
-                           fake_names[1] != sk.features[1] or
-                           not fake_names[2].loosely_eq(sk.features[2]))
+        fake_names = sorted(fake_names_tuple, reverse=True)
+
+        names_different = (not fake_names[0].loosely_eq(sk.name) or
+                           fake_names[1] != sk.first_surname or
+                           not fake_names[2].loosely_eq(sk.second_surname))
 
         assume(names_different)
         with self.assertRaises(CURPFullNameError):
-            c = CURP(sk.curp, nombre_completo=' '.join([name.word for name in fake_names]))
+            c = CURP(sk.curp, nombre_completo=' '.join([name for name in fake_names]))
 
-    @given(CURPStrats.curps(), ASCIIStrats.text(min_size=6, max_size=6, lowercase=False))
+    @given(curps(), ASCIIStrats.text(min_size=6, max_size=6, lowercase=False))
     def test_creation_date_error(self, sk: CURPSkeleton, d: str)-> None:
         """Prueba la creacion de una CURP con una fecha con caracteres no numericos. """
         assume(any(c not in string.digits for c in d))
@@ -209,8 +209,8 @@ class TestCURP(unittest.TestCase):
         self.assertNotIsInstance(cm.exception, CURPDateError)
         self.assertNotIsInstance(cm.exception, CURPVerificationError)
 
-    @given(CURPStrats.curps(), st.integers(0, 99), st.integers(0, 99), st.integers(0, 99))
-    def test_creation_date_error_nonexistent_dates(self, sk: CURPSkeleton, y: int, m: int, d: int) -> None:
+    @given(curps(), st.integers(0, 99), st.integers(0, 99), st.integers(0, 99))
+    def test_creation_date_error_nonexistent_dates(self, sk: CURPSkeleton, y: int, m: int, d: int):
         """Probar que fechas incorrectas provoquen un error."""
         date_is_valid = False
         century = '19' if sk.curp[-2].isdigit() else '20'
@@ -230,8 +230,8 @@ class TestCURP(unittest.TestCase):
         with self.assertRaises(CURPDateError):
             CURP(curp)
 
-    @given(CURPStrats.curps(), ASCIIStrats.characters(lowercase=False))
-    def test_creation_sex_error(self, sk: CURPSkeleton, s: str) -> None:
+    @given(curps(), ASCIIStrats.characters(lowercase=False))
+    def test_creation_sex_error(self, sk: CURPSkeleton, s: str):
         """Probar que códigos incorrectos de sexo provoquen un error."""
         # Solo probar códigos alfanuméricos incorrectos
         assume(s != 'H' and s != 'M')
@@ -241,8 +241,8 @@ class TestCURP(unittest.TestCase):
         with self.assertRaises(CURPSexError):
             CURP(curp)
 
-    @given(CURPStrats.curps(), ASCIIStrats.text(min_size=2, max_size=2, lowercase=False))
-    def test_creation_region_error(self, sk: CURPSkeleton, r: str) -> None:
+    @given(curps(), ASCIIStrats.text(min_size=2, max_size=2, lowercase=False))
+    def test_creation_region_error(self, sk: CURPSkeleton, r: str):
         """Probar que códigos incorrectos de región provoquen un error."""
         # Solo probar códigos alfanuméricos incorrectos
         assume(r not in estados.estados)
@@ -265,40 +265,40 @@ class TestCURP(unittest.TestCase):
 
     # Pruebas que requieren que el objeto sea construido exitosamente
 
-    @given(CURPStrats.curps())
-    def test_curp_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_curp_property(self, sk: CURPSkeleton):
         """Prueba que la propiedad CURP sea la correcta."""
         c = CURP(sk.curp)
         self.assertEqual(c.curp, sk.curp)
 
-    @given(CURPStrats.curps())
-    def test_default_names_are_null(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_default_names_are_null(self, sk: CURPSkeleton):
         """Prueba que los nombres por defecto sean None."""
         c = CURP(sk.curp)
         self.assertIsNone(c.nombre)
         self.assertIsNone(c.primer_apellido)
         self.assertIsNone(c.segundo_apellido)
 
-    @given(CURPStrats.curps())
-    def test_name_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_name_property(self, sk: CURPSkeleton):
         """Prueba la creación de una CURP con un nombre de pila."""
         c = CURP(sk.curp, nombre=sk.name)
         self.assertEqual(c.nombre, sk.name.upper())
 
-    @given(CURPStrats.curps())
-    def test_first_surname_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_first_surname_property(self, sk: CURPSkeleton):
         """Prueba la creación de una CURP con primer apellido."""
         c = CURP(sk.curp, primer_apellido=sk.first_surname)
         self.assertEqual(c.primer_apellido, sk.first_surname.upper())
 
-    @given(CURPStrats.curps())
-    def test_second_surname_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_second_surname_property(self, sk: CURPSkeleton):
         """Prueba la creación de una CURP con segundo apellido."""
         c = CURP(sk.curp, segundo_apellido=sk.second_surname)
         self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
 
-    @given(CURPStrats.curps())
-    def test_full_name_properties(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_full_name_properties(self, sk: CURPSkeleton):
         """Prueba la creación de una CURP con un nombre completo."""
         assume(not self.word_ignored(sk.name))
         assume(not self.word_ignored(sk.first_surname))
@@ -309,8 +309,8 @@ class TestCURP(unittest.TestCase):
         self.assertEqual(c.primer_apellido, sk.first_surname.upper())
         self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
 
-    @given(CURPStrats.curps())
-    def test_name_and_surnames_properties(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_name_and_surnames_properties(self, sk: CURPSkeleton):
         """Prueba la creación de una CURP con nombres/apellidos en los argumentos."""
         c = CURP(
             sk.curp,
@@ -323,34 +323,34 @@ class TestCURP(unittest.TestCase):
         self.assertEqual(c.primer_apellido, sk.first_surname.upper())
         self.assertEqual(c.segundo_apellido, sk.second_surname.upper())
 
-    @given(CURPStrats.curps())
-    def test_birth_date_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_birth_date_property(self, sk: CURPSkeleton):
         """Prueba que la extracción de la fecha de nacimiento de la CURP funcione."""
         c = CURP(sk.curp)
         self.assertEqual(c.fecha_nacimiento, sk.birth_date)
 
-    @given(CURPStrats.curps())
-    def test_sex_property(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_sex_property(self, sk: CURPSkeleton):
         """Prueba que la extracción del sexo de la CURP funcione."""
         c = CURP(sk.curp)
         self.assertEqual(c.sexo, sk.sex)
 
-    @given(CURPStrats.curps())
-    def test_region_properties(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_region_properties(self, sk: CURPSkeleton):
         """Prueba que la extracción de la entidad federativa de la CURP funcione."""
         c = CURP(sk.curp)
         self.assertEqual(c.entidad, sk.region['name'])
         self.assertEqual(c.entidad_iso, sk.region['iso'])
         self.assertEqual(c.es_extranjero, not bool(sk.region['iso']))
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_name_validation(self, sk: CURPSkeleton):
         """Prueba la validación del nombre de pila."""
         c = CURP(sk.curp)
         self.assertTrue(c.nombre_valido(sk.name))
 
-    @given(CURPStrats.curps())
-    def test_name_validation_with_compound_common_name(self, sk: CURPSkeleton) -> None:
+    @given(curps())
+    def test_name_validation_with_compound_common_name(self, sk: CURPSkeleton):
         """Prueba la comprobación de CURP con un nombre compuesto común."""
         c = CURP(sk.curp)
 
@@ -360,8 +360,8 @@ class TestCURP(unittest.TestCase):
             self.assertTrue(c.nombre_valido(f"{n.title()} {sk.name}"))
             self.assertTrue(c.nombre_valido(f"{n.lower()} {sk.name}"))
 
-    @given(CURPStrats.curps(), st.text(), CURPStrats.ignored_strings())
-    def test_name_validation_with_compound_name(self, sk: CURPSkeleton, n: str, ignored: str) -> None:
+    @given(curps(), st.text(), CURPStrats.ignored_strings())
+    def test_name_validation_with_compound_name(self, sk: CURPSkeleton, n: str, ignored: str):
         """Prueba la comprobación de CURP con un nombre compuesto."""
         assume(not self.name_ignored(sk.name))
         assume(not self.word_ignored(sk.name))
@@ -371,23 +371,23 @@ class TestCURP(unittest.TestCase):
         self.assertTrue(c.nombre_valido(f"{ignored.title()} {sk.name} {n}"))
         self.assertTrue(c.nombre_valido(f"{ignored.lower()} {sk.name} {n}"))
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_first_surname_validation(self, sk: CURPSkeleton):
         """Prueba la validación del primer apellido."""
         c = CURP(sk.curp)
         self.assertTrue(c.primer_apellido_valido(sk.first_surname))
 
-    @given(CURPStrats.curps(), CURPStrats.inconvenient())
+    @given(curps(), CURPStrats.inconvenient())
     def test_first_surname_validation_inconvenient_word(self, sk: CURPSkeleton, inconvenient: str):
         """Prueba la validación del primer apellido."""
         curp = change_curp(sk.curp, chars=f"{inconvenient[0]}X{inconvenient[2:]}")
         c = CURP(curp)
 
-        first_surname = f"{inconvenient[:2]}{sk.features[1].consonant}"
+        first_surname = f"{inconvenient[:2]}{sk.first_surname.consonant}"
         self.assertTrue(c.primer_apellido_valido(first_surname))
 
-    @given(CURPStrats.curps(), st.text(), CURPStrats.ignored_strings())
-    def test_first_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str) -> None:
+    @given(curps(), st.text(), CURPStrats.ignored_strings())
+    def test_first_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str):
         """Prueba la comprobación de CURP con un apellido compuesto."""
         assume(sk.first_surname != '')
         assume(not self.word_ignored(sk.first_surname))
@@ -396,14 +396,14 @@ class TestCURP(unittest.TestCase):
         self.assertTrue(c.primer_apellido_valido(f"{ignored.title()} {sk.first_surname} {n}"))
         self.assertTrue(c.primer_apellido_valido(f"{ignored.lower()} {sk.first_surname} {n}"))
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_second_surname_validation(self, sk: CURPSkeleton):
         """Prueba la validación del segundo apellido."""
         c = CURP(sk.curp)
         self.assertTrue(c.segundo_apellido_valido(sk.second_surname))
 
-    @given(CURPStrats.curps(), st.text(), CURPStrats.ignored_strings())
-    def test_second_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str) -> None:
+    @given(curps(), st.text(), CURPStrats.ignored_strings())
+    def test_second_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str):
         """Prueba la comprobación de CURP con un apellido compuesto."""
         assume(sk.second_surname != '')
         assume(not self.word_ignored(sk.second_surname))
@@ -412,7 +412,7 @@ class TestCURP(unittest.TestCase):
         self.assertTrue(c.segundo_apellido_valido(f"{ignored.title()} {sk.second_surname} {n}"))
         self.assertTrue(c.segundo_apellido_valido(f"{ignored.lower()} {sk.second_surname} {n}"))
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_full_name_validation(self, sk: CURPSkeleton):
         """Prueba la validación del nombre completo."""
         assume(not self.word_ignored(sk.name))
@@ -428,21 +428,34 @@ class TestCURP(unittest.TestCase):
         self.assertEqual(nombre_completo[1], sk.first_surname)
         self.assertEqual(nombre_completo[2], sk.second_surname)
 
-    @example(ignored_name='MA', sk=CURPSkeleton(name='M', first_surname='M', second_surname='', curp='MXXM000101HASXXXA4',
-             birth_date=None, sex=None, region=None, features=[FeaturedWord(word='M', vowel=-1, consonant=-1), FeaturedWord(word='M', vowel=-1, consonant=-1)]),              name_suffix=FeaturedWord(word='', vowel=-1, consonant=-1), name_prefix='', surname_a_prefix='', surname_b_prefix='')
-    @example(ignored_name='J', sk=CURPSkeleton(name='J', first_surname='J', second_surname='', curp='JXXJ000101HASXXXA3',
-             birth_date=None, sex=None, region=None, features=[FeaturedWord(word='J', vowel=-1, consonant=-1), FeaturedWord(word='J', vowel=-1, consonant=-1)]),              name_suffix=FeaturedWord(word='', vowel=-1, consonant=-1), name_prefix='', surname_a_prefix='', surname_b_prefix='')
-    @given(CURPStrats.curps(), WordStrats.words(), st.one_of(st.none(), CURPStrats.ignored_names()),
-           CURPStrats.ignored_strings(), CURPStrats.ignored_strings(), CURPStrats.ignored_strings())
-    def test_full_name_validation_with_ignored_words(self, sk: CURPSkeleton, name_suffix: FeaturedWord, ignored_name: Union[None, str],
-                                                     name_prefix: str, surname_a_prefix: str, surname_b_prefix: str):
+    @example(sk=CURPSkeleton(curp='MXXM000101HASXXXA4', birth_date=None, sex=None, region=None,
+             name=FeaturedWord(word='M', vowel=-1, consonant=-1),
+             first_surname=FeaturedWord(word='M', vowel=-1, consonant=-1), second_surname=''),
+             ignored_name='MA', name_prefix='', surname_a_prefix='', surname_b_prefix='',
+             name_suffix=FeaturedWord(word='', vowel=-1, consonant=-1))
+    @example(sk=CURPSkeleton(curp='JXXJ000101HASXXXA3', birth_date=None, sex=None, region=None,
+             name=FeaturedWord(word='J', vowel=-1, consonant=-1),
+             first_surname=FeaturedWord(word='J', vowel=-1, consonant=-1), second_surname=''),
+             ignored_name='J', name_prefix='', surname_a_prefix='', surname_b_prefix='',
+             name_suffix=FeaturedWord(word='', vowel=-1, consonant=-1))
+    @given(sk=curps(), ignored_name=st.one_of(st.none(), CURPStrats.ignored_names()),
+           name_prefix=CURPStrats.ignored_strings(),
+           surname_a_prefix=CURPStrats.ignored_strings(),
+           surname_b_prefix=CURPStrats.ignored_strings(),
+           name_suffix=WordStrats.words())
+    def test_full_name_validation_with_ignored_words(self, sk: CURPSkeleton,
+                                                     ignored_name: Union[None, str],
+                                                     name_prefix: str,
+                                                     surname_a_prefix: str,
+                                                     surname_b_prefix: str,
+                                                     name_suffix: FeaturedWord):
         """Prueba la validación del nombre completo."""
         assume(not self.word_ignored(sk.name))
-        assume(not self.word_ignored(name_suffix.word))
+        assume(not self.word_ignored(name_suffix))
         assume(not self.word_ignored(sk.first_surname))
         assume(not self.word_ignored(sk.second_surname))
 
-        assume(sk.features[1] != name_suffix)
+        assume(sk.first_surname != name_suffix)
 
         name_prefix_features = WordFeatures(name_prefix)
 
@@ -453,12 +466,12 @@ class TestCURP(unittest.TestCase):
             ignored_name_features = WordFeatures(ignored_name)
             name_prefix = f"{name_prefix} {ignored_name}"
 
-        if sk.features[0] == sk.features[1]:
-            assume(not sk.features[0].loosely_eq(name_prefix_features))
+        if sk.name == sk.first_surname:
+            assume(not sk.name.loosely_eq(name_prefix_features))
             if ignored_name:
-                assume(not sk.features[0].loosely_eq(ignored_name_features))
+                assume(not sk.name.loosely_eq(ignored_name_features))
 
-        given_names = f"{name_prefix} {sk.name} {name_suffix.word}"
+        given_names = f"{name_prefix} {sk.name} {name_suffix}"
 
         if sk.first_surname:
             first_surname = f"{surname_a_prefix} {sk.first_surname}"
@@ -474,97 +487,97 @@ class TestCURP(unittest.TestCase):
         self.assertEqual(nombre_completo[1], first_surname.strip())
         self.assertEqual(nombre_completo[2], second_surname.strip())
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_name_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_name_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un nombre de pila incorrecto."""
         # Asumir que el nombre falso no tenga la misma letra inicial
         # y primera consonante interna que el nombre real
-        assume(not fake_name.loosely_eq(sk.features[0]))
+        assume(not fake_name.loosely_eq(sk.name))
         c = CURP(sk.curp)
-        self.assertFalse(c.nombre_valido(fake_name.word))
+        self.assertFalse(c.nombre_valido(fake_name))
 
-    @given(CURPStrats.curps(), WordStrats.words(min_size=1))
-    def test_name_validation_with_compound_name_false(self, sk: CURPSkeleton, n: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words(min_size=1))
+    def test_name_validation_with_compound_name_false(self, sk: CURPSkeleton, n: FeaturedWord):
         """Prueba la comprobación de CURP con un nombre compuesto."""
-        assume(not sk.features[0].loosely_eq(n))
-        assume(not self.word_ignored(n.word))
-        assume(not self.name_ignored(n.word))
+        assume(not sk.name.loosely_eq(n))
+        assume(not self.word_ignored(n))
+        assume(not self.name_ignored(n))
 
         c = CURP(sk.curp)
-        self.assertFalse(c.nombre_valido(f"{n.word} {sk.name}"))
+        self.assertFalse(c.nombre_valido(f"{n} {sk.name}"))
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_first_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_first_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un primer apellido incorrecto."""
         # Asumir que el nombre falso no tenga la misma letra inicial
         # y primera consonante interna que el nombre real
-        assume(fake_name != sk.features[1])
+        assume(fake_name != sk.first_surname)
         c = CURP(sk.curp)
-        self.assertFalse(c.primer_apellido_valido(fake_name.word))
+        self.assertFalse(c.primer_apellido_valido(fake_name))
 
-    @given(CURPStrats.curps(), CURPStrats.inconvenient())
+    @given(curps(), CURPStrats.inconvenient())
     def test_first_surname_validation_inconvenient_word_false(self, sk: CURPSkeleton, inconvenient: str):
         """Prueba la validación del primer apellido."""
         curp = change_curp(sk.curp, chars=inconvenient)
         with self.assertRaises(CURPValueError):
             c = CURP(curp)
 
-    @given(CURPStrats.curps(), WordStrats.words(min_size=1))
-    def test_first_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words(min_size=1))
+    def test_first_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord):
         """Prueba la comprobación de CURP con un apellido compuesto."""
-        assume(sk.features[1] != n)
-        assume(not self.word_ignored(n.word))
+        assume(sk.first_surname != n)
+        assume(not self.word_ignored(n))
         c = CURP(sk.curp)
-        self.assertFalse(c.primer_apellido_valido(f"{n.word} {sk.first_surname}"))
+        self.assertFalse(c.primer_apellido_valido(f"{n} {sk.first_surname}"))
 
-    @given(CURPStrats.curps(), WordStrats.words())
-    def test_second_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words())
+    def test_second_surname_validation_false(self, sk: CURPSkeleton, fake_name: FeaturedWord):
         """Prueba la creación de una CURP con un primer apellido incorrecto."""
         # Asumir que el nombre falso no tenga la misma letra inicial
         # y primera consonante interna que el nombre real
-        assume(not fake_name.loosely_eq(sk.features[2]))
+        assume(not fake_name.loosely_eq(sk.second_surname))
         c = CURP(sk.curp)
-        self.assertFalse(c.segundo_apellido_valido(fake_name.word))
+        self.assertFalse(c.segundo_apellido_valido(fake_name))
 
-    @given(CURPStrats.curps(), WordStrats.words(min_size=1))
-    def test_second_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord) -> None:
+    @given(curps(), WordStrats.words(min_size=1))
+    def test_second_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord):
         """Prueba la comprobación de CURP con un apellido compuesto."""
-        assume(not sk.features[2].loosely_eq(n))
-        assume(not self.word_ignored(n.word))
+        assume(not sk.second_surname.loosely_eq(n))
+        assume(not self.word_ignored(n))
         c = CURP(sk.curp)
-        self.assertFalse(c.segundo_apellido_valido(f"{n.word} {sk.second_surname}"))
+        self.assertFalse(c.segundo_apellido_valido(f"{n} {sk.second_surname}"))
 
-    @given(CURPStrats.curps(), WordStrats.words(min_size=1))
+    @given(curps(), WordStrats.words(min_size=1))
     def test_full_name_validation_wrong_given_name_false(self, sk: CURPSkeleton, n: str):
         """Prueba la validación del nombre completo."""
         assume(not self.word_ignored(sk.name))
         assume(not self.word_ignored(sk.first_surname))
         assume(not self.word_ignored(sk.second_surname))
-        assume(not self.word_ignored(n.word))
-        assume(not self.name_ignored(n.word))
-        assume(not sk.features[0].loosely_eq(n))
+        assume(not self.word_ignored(n))
+        assume(not self.name_ignored(n))
+        assume(not sk.name.loosely_eq(n))
 
         c = CURP(sk.curp)
-        nombre_completo = c.nombre_completo_valido(f"{n.word} {sk.full_name}")
+        nombre_completo = c.nombre_completo_valido(f"{n} {sk.full_name}")
         self.assertFalse(nombre_completo)
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_full_name_validation_first_surname_not_empty_false(self, sk: CURPSkeleton):
         """Prueba que la validación del nombre completo falle si el apellido existe y no se encuentra."""
         empty_word = FeaturedWord('X', vowel=-1, consonant=-1)
-        assume(sk.features[1] != empty_word)
+        assume(sk.first_surname != empty_word)
         assume(not self.word_ignored(sk.name))
         assume(not self.word_ignored(sk.first_surname))
 
         c = CURP(sk.curp)
-        nombre_completo = c.nombre_completo_valido(f"{sk.name}")
+        nombre_completo = c.nombre_completo_valido(sk.name)
         self.assertFalse(nombre_completo)
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_full_name_validation_second_surname_not_empty_false(self, sk: CURPSkeleton):
         """Prueba que la validación del nombre completo falle si el apellido existe y no se encuentra."""
         empty_word = FeaturedWord('X', vowel=-1, consonant=-1)
-        assume(not sk.features[2].loosely_eq(empty_word))
+        assume(not sk.second_surname.loosely_eq(empty_word))
         assume(not self.word_ignored(sk.name))
         assume(not self.word_ignored(sk.first_surname))
         assume(not self.word_ignored(sk.second_surname))
@@ -573,7 +586,7 @@ class TestCURP(unittest.TestCase):
         nombre_completo = c.nombre_completo_valido(f"{sk.name} {sk.first_surname}")
         self.assertFalse(nombre_completo)
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_json_dump(self, sk: CURPSkeleton):
         """Prueba el método json."""
         c = CURP(sk.curp)
@@ -588,7 +601,7 @@ class TestCURP(unittest.TestCase):
         n = any([x in j for x in ('nombre', 'primer_apellido', 'segundo_apellido')])
         self.assertFalse(n)
 
-    @given(CURPStrats.curps())
+    @given(curps())
     def test_json_dump_name_and_surnames(self, sk: CURPSkeleton):
         """Prueba el método json."""
         c = CURP(
@@ -640,18 +653,18 @@ class TestCURP(unittest.TestCase):
 
     # Otras pruebas
 
-    # @given(CURPStrats.curps())
+    # @given(curps())
     # def test_example(self, g):
     #     print(g)
 
     # Utilidades
 
     @staticmethod
-    def word_ignored(word: str):
+    def word_ignored(word: str) -> bool:
         return unidecode(word.upper()) in CURP._ignored_words
 
     @staticmethod
-    def name_ignored(name: str):
+    def name_ignored(name: str) -> bool:
         return unidecode(name.upper()) in CURP._ignored_names
 
 
