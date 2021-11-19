@@ -13,7 +13,7 @@ Uso básico:
     >>> c.fecha_nacimiento
     datetime.date(1956, 6, 26)
     >>> c.sexo
-    2
+    <Sexo.MUJER: 2>
     >>> c.entidad_nacimiento
     'Ciudad de México'
     >>> c.entidad_nacimiento_iso
