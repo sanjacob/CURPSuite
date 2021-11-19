@@ -33,7 +33,7 @@ __title__ = "CURPSuite"
 __summary__ = "Análisis y validación de la CURP Mexicana"
 __uri__ = "https://github.com/jacobszpz/CURPSuite"
 
-__version__ = "2.5.1"
+__version__ = "2.6.0"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"

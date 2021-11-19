@@ -3,6 +3,19 @@
 Changelog
 =========
 
+CURP Suite 2.6.0 (2021-11-19)
+-----------------------------
+
+Features
+^^^^^^^^
+
+- Agregar soporte para Python 3.10.
+
+Bugfixes
+^^^^^^^^
+
+- Corregir error menor en test por cambios en la versión anterior.
+
 CURP Suite 2.5.1 (2021-11-19)
 -----------------------------
 
