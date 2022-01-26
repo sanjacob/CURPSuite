@@ -254,11 +254,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:60b5b03de4219d0ead26d481e4029941024b9cbeb4ef99cc285c5fafa920e908",
-                "sha256:8e126f2f59d81f32a5c6866df2558b119938515ed9cd6c9a044ef6a74e649ee5"
+                "sha256:2b9c56faa067d660f0802679689f825bf142eec8261ab9e2e6ea916b1d8278a1",
+                "sha256:fa9f845b06199ea87e68c6da04a609ff46e381b5d542351184790d54eaca144c"
             ],
             "index": "pypi",
-            "version": "==6.25.0"
+            "version": "==6.36.0"
         },
         "idna": {
             "hashes": [
@@ -281,7 +281,7 @@
                 "sha256:899e2a40a8c4a1aec681feef45733de8a6c58f3f6a0dbed2eb6574b4387a77b6",
                 "sha256:951f0d8a5b7260e9db5e41d429285b5f451e928479f19d80818878527d36e95e"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version >= '3.7'",
             "version": "==4.10.1"
         },
         "jeepney": {
