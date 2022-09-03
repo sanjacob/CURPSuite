@@ -248,6 +248,14 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.19"
         },
+        "exceptiongroup": {
+            "hashes": [
+                "sha256:6990c24f06b8d33c8065cfe43e5e8a4bfa384e0358be036af9cc60b6321bd11a",
+                "sha256:ab0a968e1ef769e55d9a596f4a89f7be9ffedbc9fdefdb77cc68cf5c33ce1035"
+            ],
+            "markers": "python_version < '3.11'",
+            "version": "==1.0.0rc8"
+        },
         "filelock": {
             "hashes": [
                 "sha256:55447caa666f2198c5b6b13a26d2084d26fa5b115c00d065664b2124680c4edc",
@@ -266,11 +274,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:7202ea05759f591adf6c1887edbd4d53c049821284f630c5ec8ec3f3f57fd46b",
-                "sha256:7789664e0b487f6553492500738d6ed29ee1af143857d605b296d112154a4057"
+                "sha256:469125235b4fdd6b6a4b6a6fa13e528d3e8de4dbd3bd9236b03323fefa3a9b32",
+                "sha256:ee42fe4d2ff96c49910085780d6b8f34cbcf4c44427616e22833869d451116bb"
             ],
             "index": "pypi",
-            "version": "==6.36.2"
+            "version": "==6.54.4"
         },
         "idna": {
             "hashes": [
