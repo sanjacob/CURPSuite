@@ -278,11 +278,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:2d5e2d5ccd0efce4e0968a6164f4e4853f808e33f4d91490c975c98beec0c7c3",
-                "sha256:e44833325f9a55f795596ceefd7ede7d626cfe45836025d2647cccaff7070e10"
+                "sha256:cefdaf6143170f1aa28adf4816d12547ab60f93c143f7d5205507d9e4804fccd",
+                "sha256:df01b518d3c79c34ca5a15462af5407d1e73dd2d7003d374299dddb195aa155d"
             ],
             "index": "pypi",
-            "version": "==6.54.6"
+            "version": "==6.56.1"
         },
         "idna": {
             "hashes": [
@@ -305,7 +305,7 @@
                 "sha256:da31db32b304314d044d3c12c79bd59e307889b287ad12ff387b3500835fc2ab",
                 "sha256:ddb0e35065e8938f867ed4928d0ae5bf2a53b7773871bfe6bcc7e4fcdc7dea43"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version >= '3.7'",
             "version": "==5.0.0"
         },
         "jaraco.classes": {
