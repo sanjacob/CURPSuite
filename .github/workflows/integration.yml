@@ -32,6 +32,6 @@ jobs:
       - name: Update pip
         run: python -m pip install --upgrade pip
       - name: Install Tox
-        run: pip install tox unidecode
+        run: pip install tox==3.27.0 unidecode
       - name: Run Tox
         run: tox -e py
