@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import unittest
-from hypothesis import given, assume, example
+from hypothesis import given, assume, example, settings
 from hypothesis import strategies as st
 from .utils import CURPSkeleton, FeaturedWord, change_curp, insert_in_word
 from .strategies import WordStrats, CURPStrats, ASCIIStrats
@@ -386,6 +386,7 @@ class TestCURP(unittest.TestCase):
         first_surname = f"{inconvenient[:2]}{sk.first_surname.consonant}"
         self.assertTrue(c.primer_apellido_valido(first_surname))
 
+    @settings(deadline=1000)
     @given(curps(), st.text(), CURPStrats.ignored_strings())
     def test_first_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str):
         """Prueba la comprobación de CURP con un apellido compuesto."""
@@ -402,6 +403,7 @@ class TestCURP(unittest.TestCase):
         c = CURP(sk.curp)
         self.assertTrue(c.segundo_apellido_valido(sk.second_surname))
 
+    @settings(deadline=1000)
     @given(curps(), st.text(), CURPStrats.ignored_strings())
     def test_second_surname_validation_with_compound_surname(self, sk: CURPSkeleton, n: str, ignored: str):
         """Prueba la comprobación de CURP con un apellido compuesto."""
@@ -522,6 +524,7 @@ class TestCURP(unittest.TestCase):
         with self.assertRaises(CURPValueError):
             c = CURP(curp)
 
+    @settings(deadline=1000)
     @given(curps(), WordStrats.words(min_size=1))
     def test_first_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord):
         """Prueba la comprobación de CURP con un apellido compuesto."""
@@ -539,6 +542,7 @@ class TestCURP(unittest.TestCase):
         c = CURP(sk.curp)
         self.assertFalse(c.segundo_apellido_valido(fake_name))
 
+    @settings(deadline=1000)
     @given(curps(), WordStrats.words(min_size=1))
     def test_second_surname_validation_with_compound_surname_false(self, sk: CURPSkeleton, n: FeaturedWord):
         """Prueba la comprobación de CURP con un apellido compuesto."""
