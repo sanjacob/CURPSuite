@@ -74,7 +74,7 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], m√°s informaci√
 [license-badge]: https://img.shields.io/github/license/jacobszpz/CURPSuite
 [version-badge]: https://img.shields.io/pypi/v/CURPSuite
 [python-version-badge]: https://img.shields.io/pypi/pyversions/CURPSuite
-[build-badge]: https://img.shields.io/github/actions/workflow/status/jacobszpz/CURPSuite/test.yml?branch=main
+[build-badge]: https://img.shields.io/github/actions/workflow/status/jacobszpz/CURPSuite/integration.yml?branch=main
 [actions]: https://github.com/jacobszpz/CURPSuite/actions
 [docs-badge]: https://img.shields.io/readthedocs/curpsuite
 [rtd]: https://curpsuite.readthedocs.io
