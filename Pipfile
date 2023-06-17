@@ -12,7 +12,6 @@ coverage = "*"
 sphinx = "*"
 recommonmark = "*"
 mypy = "*"
-tox = "*"
 twine = "*"
 flake8 = "*"
 
