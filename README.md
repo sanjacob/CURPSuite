@@ -1,6 +1,6 @@
 # CURP Suite
 
-[![PyPI Version][version-badge]][pypi] [![Python versions][python-version-badge]][pypi] [![License: GPL  v2][license-badge]][gnu] [![Build][build-badge]][actions] [![ReadTheDocs][docs-badge]][rtd] [![Downloads per month][downloads-badge]][pypi-stats]
+[![PyPI Version][version-badge]][pypi] [![Python versions][python-version-badge]][pypi] [![License: GPL  v2][license-badge]][gnu] [![Build][build-badge]][actions] [![ReadTheDocs][docs-badge]][rtd] [![Total downloads][downloads-badge]][pepy]
 
 **CURP Suite** es una librería de análisis y validación de la CURP Mexicana.
 
@@ -79,5 +79,6 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], más informaci�
 [docs-badge]: https://img.shields.io/readthedocs/curpsuite
 [rtd]: https://curpsuite.readthedocs.io
 [rtd-changelog]: https://curpsuite.readthedocs.io/es/latest/CHANGELOG.html
-[downloads-badge]: https://img.shields.io/pypi/dm/curpsuite
+[downloads-badge]: https://static.pepy.tech/badge/curpsuite
+[pepy]: https://pepy.tech/project/curpsuite
 [pypi-stats]: https://pypistats.org/packages/curpsuite
