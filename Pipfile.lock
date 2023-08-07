@@ -315,7 +315,7 @@
                 "sha256:ce785cf81a7bdade534297ef9e490ddff800d956625020ab2ec2780a556c313e",
                 "sha256:d0d651aa754ef58d75cec6edfbd21259d93810b73f6ec246436a21b7841908de"
             ],
-            "index": "pypi",
+            "markers": "python_version >= '3.7'",
             "version": "==41.0.3"
         },
         "docutils": {
@@ -344,11 +344,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:63dc6b094b52da6180ca50edd63bf08184bc96810f8624fdbe66578aaf377993",
-                "sha256:75d74da36fd3837b5b3fe15211dabc7389e78d882bf2c91bab2184ccf91fe64c"
+                "sha256:0b11df224102bef9441ebd91537b61f416d21ee0c7bdb1da49d903d6d4bfc063",
+                "sha256:b62b8736fdaece14fc0a54bccfa3da341c6f44a857128c9a1774faf63956279a"
             ],
             "index": "pypi",
-            "version": "==6.80.0"
+            "version": "==6.82.2"
         },
         "idna": {
             "hashes": [
@@ -371,7 +371,7 @@
                 "sha256:3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb",
                 "sha256:dbace7892d8c0c4ac1ad096662232f831d4e64f4c4545bd53016a3e9d4654743"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version >= '3.8'",
             "version": "==6.8.0"
         },
         "jaraco.classes": {
@@ -488,11 +488,11 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:928d514ffd22b5b0a8fce326d57f423a55d2ff783b093bab217eda71e732330f",
-                "sha256:cd65437d7c4b615ab81c0640c0480bc29a550ea032891977681efd28344d51e1"
+                "sha256:626c369fa0eb37bac0291bce8259b332fd59ac792fa5497b59837309cd5b114a",
+                "sha256:64e0735fcfdc6f3464ea133afe8ea4483b1c5fe3a3d69852e6503b43a0b222e6"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==10.0.0"
+            "version": "==10.1.0"
         },
         "mypy": {
             "hashes": [
@@ -575,11 +575,11 @@
         },
         "pygments": {
             "hashes": [
-                "sha256:8ace4d3c1dd481894b2005f560ead0f9f19ee64fe983366be1a21e171d12775c",
-                "sha256:db2db3deb4b4179f399a09054b023b6a586b76499d36965813c71aa8ed7b5fd1"
+                "sha256:13fc09fa63bc8d8671a6d247e1eb303c4b343eaee81d861f3404db2935653692",
+                "sha256:1daff0494820c69bc8941e407aa20f577374ee88364ee10a98fdbe0aece96e29"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.15.1"
+            "version": "==2.16.1"
         },
         "readme-renderer": {
             "hashes": [
