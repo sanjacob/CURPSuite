@@ -22,6 +22,15 @@ True
 
 CURP Suite te permite extraer toda la información que contiene una CURP de forma conveniente. Además, toda la validación es automática. CURP Suite está diseñado para dar soporte a toda la especificación oficial de la CURP.
 
+También puede ser invocada desde la terminal
+
+```bash
+$ curp SABC560626MDFLRN01
+{"curp": "SABC560626MDFLRN01", "sexo": 2, "fecha_nacimiento": "1956-06-26", "entidad_nacimiento": {"name": "Ciudad de México", "iso": "MX-CMX"}}
+```
+
+
+
 
 
 ## Instalación
