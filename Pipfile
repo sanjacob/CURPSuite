@@ -14,6 +14,8 @@ recommonmark = "*"
 mypy = "*"
 twine = "*"
 flake8 = "*"
+setuptools = "*"
+build = "*"
 
 [requires]
 python_version = "3.9"
