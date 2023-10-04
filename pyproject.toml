@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CURPSuite"
+description = "Análisis y validación de la CURP Mexicana"
+dynamic = ["version", "readme"]
+authors = [
+  { name="Jacob Sánchez", email="jacobszpz@protonmail.com" },
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Legal Industry",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: Spanish"
+]
+dependencies = [
+    "unidecode"
+]
+keywords = ["CURP", "validation", "analysis", "Mexico"]
+
+[project.scripts]
+curp = "curp.cli:main"
+
+[project.urls]
+"Homepage" = "https://curpsuite.readthedocs.io"
+"Repository" = "https://github.com/jacobszpz/CURPSuite"
+
+[tool.setuptools.dynamic]
+version = {attr = "curp.__about__.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+
+[project.optional-dependencies]
+test = ["pytest", "hypothesis", "coverage"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+omit = [
+    "*/python?.?/*",
+    "*/lib-python/?.?/*.py",
+    "*/pypy/*"
+]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:"
+]
