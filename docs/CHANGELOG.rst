@@ -3,6 +3,21 @@
 Changelog
 =========
 
+CURP Suite 2.6.1 (2023-10-04)
+-----------------------------
+
+Features
+^^^^^^^^
+
+- Soporte para pyproject.toml en lugar de setup.py o setup.cfg
+- Dependencias actualizadas
+
+Bugfixes
+^^^^^^^^
+
+- Build de documentación corregida
+- Ahora los tests tienen un timeout mayor
+
 CURP Suite 2.6.0 (2021-11-19)
 -----------------------------
 
