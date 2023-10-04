@@ -15,7 +15,7 @@ CURP Suite: CURP para Humanos
 .. image:: https://img.shields.io/github/license/jacobszpz/CURPSuite
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-.. image:: https://img.shields.io/github/workflow/status/jacobszpz/CURPSuite/Python%20CI/master
+.. image:: https://img.shields.io/github/actions/workflow/status/jacobszpz/CURPSuite/integration.yml?branch=master
     :target: https://github.com/jacobszpz/CURPSuite/actions
 
 .. image:: https://img.shields.io/readthedocs/curpsuite
