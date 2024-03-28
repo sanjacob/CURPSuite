@@ -53,12 +53,12 @@
         },
         "build": {
             "hashes": [
-                "sha256:8ed0851ee76e6e38adce47e4bee3b51c771d86c64cf578d0c2245567ee200e73",
-                "sha256:8eea65bb45b1aac2e734ba2cc8dad3a6d97d97901a395bd0ed3e7b46953d2a31"
+                "sha256:49df7f8e1e74d345fe71e54f5d56423b2111eda89e3da53a2c18392954dade1d",
+                "sha256:6105465d9b233433ce8ffa151c760f674446ba766af0290fc14bfa32aef92a04"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==1.1.1"
+            "markers": "python_version >= '3.8'",
+            "version": "==1.2.0"
         },
         "certifi": {
             "hashes": [
