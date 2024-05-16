@@ -336,11 +336,11 @@
         },
         "exceptiongroup": {
             "hashes": [
-                "sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14",
-                "sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68"
+                "sha256:5258b9ed329c5bbdd31a309f53cbfb0b155341807f6ff7606a1e801a891b29ad",
+                "sha256:a4785e48b045528f5bfe627b6ad554ff32def154f42372786903b7abcfe1aa16"
             ],
             "markers": "python_version < '3.11'",
-            "version": "==1.2.0"
+            "version": "==1.2.1"
         },
         "flake8": {
             "hashes": [
@@ -353,12 +353,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:bfe6173e36c8cf0779a79de757a8a7151568b2703cb14dcbc186517c7a79144b",
-                "sha256:e9ceaa5bbd244471fa1c28272fb2b0c68bb6ee014473394d63519ed02bd2d4de"
+                "sha256:013df31b04a4daede13756f497e60e451963d86f426395a79f99c5d692919bbd",
+                "sha256:59b4d144346d5cffb482cc1bafbd21b13ff31608e8c4b3e4630339aee3e87763"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==6.93.0"
+            "version": "==6.102.4"
         },
         "idna": {
             "hashes": [
