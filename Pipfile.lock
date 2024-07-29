@@ -716,12 +716,12 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:3d8531791a27056f4a38cd3e54084d8b1c4228ff9cf3f2d7dd075ec99f9fd70d",
-                "sha256:f501b6e6db709818dc76882582d9c516bf3b67b948864c5fa1d1624c09a49207"
+                "sha256:5a0d9c6a2f332881a0153f629d8000118efd33255cfa802757924c53312c76da",
+                "sha256:98b4d786a12fadd34eabf69e8d014b84e5fc655981e4ff419994700434ace132"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==71.0.3"
+            "version": "==72.0.0"
         },
         "snowballstemmer": {
             "hashes": [
