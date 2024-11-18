@@ -372,12 +372,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:06ea8857e1e711a1a6f24154a3c8c4eab04b041993206aaa267f98b859fd6ef5",
-                "sha256:1e6adbd9534c0d691690b5006904327ea37c851d4e15262a22094aa77879e84d"
+                "sha256:1403676d95bc9f118a30ce2c97fcbdd28dd99f3a1ffe3456970d98a56b370f36",
+                "sha256:dff13689c4ceb0d84d92e0309fca3ccc1b547ac30552037c712a9080eb75cd05"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==6.112.0"
+            "markers": "python_version >= '3.9'",
+            "version": "==6.119.3"
         },
         "idna": {
             "hashes": [
