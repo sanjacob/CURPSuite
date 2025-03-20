@@ -770,12 +770,12 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:34750dcb17d046929f545dec9b8349fe42bf4ba13ddffee78428aec422dbfb73",
-                "sha256:4959b9ad482ada2ba2320c8f1a8d8481d4d8d668908a7a1b84d987375cd7f5bd"
+                "sha256:81a234dff81a82bb52e522c8aef145d0dd4de1fd6de4d3b196d0f77dc2fded26",
+                "sha256:a1246a1b4178c66d7cf50c9fc6d530fac3f89bc284cf803c7fa878c41b1a03b2"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==76.1.0"
+            "version": "==77.0.1"
         },
         "snowballstemmer": {
             "hashes": [
