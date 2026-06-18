@@ -1,4 +1,4 @@
 unidecode==1.4.0
 sphinx==7.4.7
-alabaster==0.7.16
+alabaster==1.0.0
 recommonmark
