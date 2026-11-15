@@ -80,11 +80,11 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], m√°s informaci√
 [license]: LICENSE "General Public License"
 [gnu]: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html "Free Software Foundation"
 [pypi]: https://pypi.org/project/CURPSuite
-[license-badge]: https://img.shields.io/github/license/jacobszpz/CURPSuite
+[license-badge]: https://img.shields.io/github/license/sanjacob/CURPSuite
 [version-badge]: https://img.shields.io/pypi/v/CURPSuite
 [python-version-badge]: https://img.shields.io/pypi/pyversions/CURPSuite
-[build-badge]: https://img.shields.io/github/actions/workflow/status/jacobszpz/CURPSuite/integration.yml?branch=master
-[actions]: https://github.com/jacobszpz/CURPSuite/actions
+[build-badge]: https://img.shields.io/github/actions/workflow/status/sanjacob/CURPSuite/integration.yml?branch=master
+[actions]: https://github.com/sanjacob/CURPSuite/actions
 [docs-badge]: https://img.shields.io/readthedocs/curpsuite
 [rtd]: https://curpsuite.readthedocs.io
 [rtd-changelog]: https://curpsuite.readthedocs.io/es/latest/CHANGELOG.html

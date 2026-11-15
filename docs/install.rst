@@ -24,7 +24,7 @@ Si deseas conseguir una copia del código fuente, clona el repositorio público.
 
 ::
 
-    $ git clone https://github.com/jacobszpz/CURPSuite.git
+    $ git clone https://github.com/sanjacob/CURPSuite.git
 
 Para instalar las dependencias::
 

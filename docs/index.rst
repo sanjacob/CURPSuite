@@ -12,11 +12,11 @@ CURP Suite: CURP para Humanos
 .. image:: https://img.shields.io/pypi/pyversions/CURPSuite
     :target: https://pypi.org/project/CURPSuite
 
-.. image:: https://img.shields.io/github/license/jacobszpz/CURPSuite
+.. image:: https://img.shields.io/github/license/sanjacob/CURPSuite
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-.. image:: https://img.shields.io/github/actions/workflow/status/jacobszpz/CURPSuite/integration.yml?branch=master
-    :target: https://github.com/jacobszpz/CURPSuite/actions
+.. image:: https://img.shields.io/github/actions/workflow/status/sanjacob/CURPSuite/integration.yml?branch=master
+    :target: https://github.com/sanjacob/CURPSuite/actions
 
 .. image:: https://img.shields.io/readthedocs/curpsuite
     :target: https://curpsuite.readthedocs.io

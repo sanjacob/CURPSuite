@@ -31,12 +31,12 @@ __all__ = [
 
 __title__ = "CURPSuite"
 __summary__ = "Análisis y validación de la CURP Mexicana"
-__uri__ = "https://github.com/jacobszpz/CURPSuite"
+__uri__ = "https://github.com/sanjacob/CURPSuite"
 
 __version__ = "2.6.1"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
 
-__license__ = "GNU General Public License v2"
+__license__ = "GPL-2.0-or-later"
 __copyright__ = f"2021, {__author__}"

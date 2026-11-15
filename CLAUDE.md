@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 **CURP Suite** (`CURPSuite` on PyPI, import name `curp`) parses and validates
 the Mexican CURP (Clave Única de Registro de Población). Pure Python, single
-runtime dependency: `unidecode`. Licensed GPL v2.
+runtime dependency: `unidecode`. Licensed GPL-2.0-or-later.
 
 Code, docstrings, error messages, docs and user-facing text are in **Spanish**;
 keep new public API names and messages in Spanish to match
@@ -76,7 +76,11 @@ it checks `v{__version__}` matches the tag and publishes to PyPI.
   `unidecode` stubs. Don't mass-reformat unrelated code in feature PRs.
 - Supported Python: 3.13–3.15 (`requires-python = ">=3.13"`); the default dev
   interpreter is pinned in `.python-version` (3.15). Read the Docs builds with
-  3.13 (`.readthedocs.yaml`).
+  3.13 (`.readthedocs.yaml`, deps pinned separately in `docs/requirements.txt`;
+  keep its versions in step with `uv.lock`).
+- Use a current uv. Older uv releases resolve `3.15` to a 3.15 beta, where
+  hypothesis's compiled `_native` module fails to import. If tests die with
+  `No module named 'hypothesis._native'`, check `uv run python -V`.
 
 ## Conventions
 

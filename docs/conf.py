@@ -89,7 +89,7 @@ html_theme = 'alabaster'
 # documentation.
 html_theme_options = {
     'show_powered_by': False,
-    'github_user': 'jacobszpz',
+    'github_user': 'sanjacob',
     'github_repo': 'CURPSuite',
     'github_banner': True,
     'show_related': False,
