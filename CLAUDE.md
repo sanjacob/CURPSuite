@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 **CURP Suite** (`CURPSuite` on PyPI, import name `curp`) parses and validates
 the Mexican CURP (Clave Única de Registro de Población). Pure Python, single
-runtime dependency: `unidecode`. Licensed GPL v2.
+runtime dependency: `unidecode`. Licensed GPL-2.0-or-later.
 
 Code, docstrings, error messages, docs and user-facing text are in **Spanish**;
 keep new public API names and messages in Spanish to match
