@@ -41,7 +41,7 @@ $ curp SABC560626MDFLRN01
 $ python3 -m pip install CURPSuite
 ```
 
-CURP Suite soporta Python 3.8+.
+CURP Suite soporta Python 3.13+.
 
 
 
@@ -76,7 +76,7 @@ Este programa se distribuye bajo la licencia [GPLv2.0][license], m√°s informaci√
 [iso3166]: https://es.wikipedia.org/wiki/ISO_3166-2 "ISO 3166-2"
 [git]: https://git-scm.com/	"Git"
 [python]: https://www.python.org/ "Python.org"
-[pipenv]: https://pipenv.pypa.io/en/latest/ "Pipenv"
+[uv]: https://docs.astral.sh/uv/ "uv"
 [license]: LICENSE "General Public License"
 [gnu]: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html "Free Software Foundation"
 [pypi]: https://pypi.org/project/CURPSuite

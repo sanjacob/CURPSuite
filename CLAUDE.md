@@ -36,34 +36,37 @@ keep new public API names and messages in Spanish to match
 
 ## Environment setup
 
-Dependencies are managed with Pipenv (`Pipfile` / `Pipfile.lock`); CI installs
-them into the system interpreter rather than a virtualenv:
+Dependencies are managed with [uv](https://docs.astral.sh/uv/): runtime deps in
+`[project] dependencies`, dev tools in `[dependency-groups] dev` of
+`pyproject.toml`, all pinned in `uv.lock` (commit it). `uv sync` creates `.venv`
+with the package installed in editable mode plus the dev group:
 
 ```bash
-pip install pipenv
-pipenv requirements --dev > /tmp/requirements.txt
-pip install -r /tmp/requirements.txt
-pip install -e .
+uv sync                       # add --locked to fail if uv.lock is stale (CI does)
+uv add <pkg>                  # runtime dep;  uv add --dev <pkg> for a dev tool
 ```
+
+`docs/requirements.txt` is separate and used only by Read the Docs.
 
 ## Commands
 
 ```bash
-python -m unittest            # full test suite (what CI runs; ~20s, hypothesis)
-python -m unittest tests.test_curp.TestCURP   # a single class (example)
-flake8 curp tests             # lint (not enforced in CI)
-mypy curp                     # type check (not enforced in CI)
-python -m build               # build sdist/wheel
-cd docs && make html          # build docs
+uv run python -m unittest     # full test suite (what CI runs; ~20s, hypothesis)
+uv run python -m unittest tests.test_curp.TestCURP   # a single class (example)
+uv run flake8 curp tests      # lint (not enforced in CI)
+uv run mypy curp              # type check (not enforced in CI)
+uv run python -m build        # build sdist/wheel
+cd docs && uv run make html   # build docs
 ```
 
 `docs/dev/contributing.rst` mentions `tox`, but there is no tox config; use
-`python -m unittest`.
+`uv run python -m unittest`.
 
 ## CI
 
-`.github/workflows/integration.yml` runs `python -m unittest` on Python
-3.10–3.14 across Ubuntu, macOS and Windows for pushes/PRs to `master`. On a tag,
+`.github/workflows/integration.yml` runs `uv sync --locked` then
+`uv run python -m unittest` on Python
+3.13–3.15 across Ubuntu, macOS and Windows for pushes/PRs to `master`. On a tag,
 it checks `v{__version__}` matches the tag and publishes to PyPI.
 
 ## Known state (as of this file's creation)
@@ -71,7 +74,9 @@ it checks `v{__version__}` matches the tag and publishes to PyPI.
 - Tests pass. `flake8` reports existing style warnings (mostly E501) and
   `mypy` reports implicit-`Optional` defaults in `CURP.__init__` plus missing
   `unidecode` stubs. Don't mass-reformat unrelated code in feature PRs.
-- `pyproject.toml`/README claim Python 3.8+, while CI tests 3.10+.
+- Supported Python: 3.13–3.15 (`requires-python = ">=3.13"`); the default dev
+  interpreter is pinned in `.python-version` (3.15). Read the Docs builds with
+  3.13 (`.readthedocs.yaml`).
 
 ## Conventions
 
