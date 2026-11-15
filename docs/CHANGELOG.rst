@@ -3,6 +3,16 @@
 Changelog
 =========
 
+Sin publicar
+------------
+
+Cambios
+^^^^^^^
+
+- Se requiere Python 3.13 o superior (soporte para 3.13, 3.14 y 3.15).
+  Se elimina el soporte para Python 3.8 a 3.12.
+- Las dependencias de desarrollo se gestionan con uv (``uv.lock``) en lugar de Pipenv.
+
 CURP Suite 2.6.1 (2023-10-04)
 -----------------------------
 

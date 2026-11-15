@@ -9,13 +9,13 @@ dynamic = ["version", "readme"]
 authors = [
   { name="Jacob Sánchez", email="jacobszpz@protonmail.com" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.13"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Legal Industry",
@@ -33,6 +33,19 @@ curp = "curp.cli:main"
 [project.urls]
 "Homepage" = "https://curpsuite.readthedocs.io"
 "Repository" = "https://github.com/jacobszpz/CURPSuite"
+
+[dependency-groups]
+dev = [
+    "hypothesis",
+    "coverage",
+    "sphinx",
+    "recommonmark",
+    "mypy",
+    "twine",
+    "flake8",
+    "setuptools",
+    "build",
+]
 
 [tool.setuptools.dynamic]
 version = {attr = "curp.__about__.__version__"}
