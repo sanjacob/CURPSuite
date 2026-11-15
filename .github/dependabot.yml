@@ -9,3 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: "pip" # docs/requirements.txt, used by Read the Docs
+    directory: "/docs"
+    schedule:
+      interval: "daily"
