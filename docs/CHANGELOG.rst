@@ -3,15 +3,27 @@
 Changelog
 =========
 
-Sin publicar
-------------
+CURP Suite 2.7.0 (2026-11-16)
+-----------------------------
 
-Cambios
-^^^^^^^
+Features
+^^^^^^^^
 
-- Se requiere Python 3.13 o superior (soporte para 3.13, 3.14 y 3.15).
-  Se elimina el soporte para Python 3.8 a 3.12.
+- Soporte para Python 3.13, 3.14 y 3.15.
+- Dependencias actualizadas.
+
+Bugfixes
+^^^^^^^^
+
+- Corregir el ejemplo de uso del paquete (``entidad`` y ``entidad_iso``).
+
+Misc
+^^^^
+
+- Se requiere Python 3.13 o superior. Se elimina el soporte para Python 3.8 a 3.12.
+- Se elimina el extra opcional ``[test]``.
 - Las dependencias de desarrollo se gestionan con uv (``uv.lock``) en lugar de Pipenv.
+- Metadatos del paquete actualizados (licencia en formato SPDX y URLs del repositorio).
 
 CURP Suite 2.6.1 (2023-10-04)
 -----------------------------

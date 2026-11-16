@@ -14,9 +14,9 @@ Uso básico:
     datetime.date(1956, 6, 26)
     >>> c.sexo
     <Sexo.MUJER: 2>
-    >>> c.entidad_nacimiento
+    >>> c.entidad
     'Ciudad de México'
-    >>> c.entidad_nacimiento_iso
+    >>> c.entidad_iso
     'MX-CMX'
 
 La documentación completa se encuentra en <https://curpsuite.readthedocs.io>.
